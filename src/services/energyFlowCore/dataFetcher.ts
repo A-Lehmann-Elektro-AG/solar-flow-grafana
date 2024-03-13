@@ -1,11 +1,11 @@
-import {FlowType, FlowData} from "../../models/flow";
+import {FlowData, FlowType} from "../../models/flow";
 
 export class DataFetcher {
   public static async fetchNewFlowData(): Promise<FlowData> {
     return {
-      pv: 1000,
-      grid: 500,
-      load: 1500,
+      pv: 1500,
+      grid: -500,
+      load: 1000,
       flowType: FlowType.overConsumption
     };
   }

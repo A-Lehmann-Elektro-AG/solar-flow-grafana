@@ -1,11 +1,11 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
-  "name": "Grafplugin-Test",
+  "name": "aepli-sollar",
   "id": "lehmann-grafplugintest-panel",
   "info": {
     "keywords": ["panel"],
-    "description": "Test grafana plugin",
+    "description": "Aepli visualization app reimplementation for Grafana",
     "author": {
       "name": "Lehmann"
     },

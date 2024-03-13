@@ -1,11 +1,12 @@
 import React from 'react';
-import { PanelProps } from '@grafana/data';
-import { SimpleOptions } from 'types';
-import { css, cx } from '@emotion/css';
-import { useStyles2, useTheme2 } from '@grafana/ui';
+import {PanelProps} from '@grafana/data';
+import {SimpleOptions} from 'types';
+import {css, cx} from '@emotion/css';
+import {useStyles2} from '@grafana/ui';
 import {EnergyFlow} from "./energyFlow";
 
-interface Props extends PanelProps<SimpleOptions> {}
+interface Props extends PanelProps<SimpleOptions> {
+}
 
 const getStyles = () => {
   return {
@@ -27,8 +28,8 @@ const getStyles = () => {
   };
 };
 
-export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
-  const theme = useTheme2();
+export const SimplePanel: React.FC<Props> = ({options, data, width, height}) => {
+  // const theme = useTheme2();
   const styles = useStyles2(getStyles);
   return (
     <div
@@ -42,7 +43,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
     >
       <div className={styles.textBox}>
         <EnergyFlow/>
-        <h1 className={css`color: ${theme.colors.text}`}>Energy Flow</h1>
+        {/*<Point label="Load" value={12} style={bluePoint} icon="icons/electrical_services.svg"/>*/}
       </div>
     </div>
   );

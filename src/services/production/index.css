@@ -1,0 +1,10 @@
+.chart {
+  width: 25%;
+  height: 40%;
+
+  margin: 0 10%;
+}
+
+.production-chart {
+  padding: 20px;
+}
