@@ -3,6 +3,7 @@ import { PanelProps } from '@grafana/data';
 import { SimpleOptions } from 'types';
 import { css, cx } from '@emotion/css';
 import { useStyles2, useTheme2 } from '@grafana/ui';
+import {EnergyFlow} from "./energyFlow";
 
 interface Props extends PanelProps<SimpleOptions> {}
 
@@ -39,22 +40,9 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
         `
       )}
     >
-      <svg
-        className={styles.svg}
-        width={width}
-        height={height}
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
-      >
-        <g>
-          <circle style={{ fill: theme.colors.primary.main }} r={100} />
-        </g>
-      </svg>
-
       <div className={styles.textBox}>
-        {options.showSeriesCount && <div>Number of series: {data.series.length}</div>}
-        <div>Text option value: {options.text}</div>
+        <EnergyFlow/>
+        <h1 className={css`color: ${theme.colors.text}`}>Energy Flow</h1>
       </div>
     </div>
   );
