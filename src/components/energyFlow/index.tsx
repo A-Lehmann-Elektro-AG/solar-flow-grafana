@@ -10,7 +10,15 @@ export interface PointPosition {
   y: number;
 }
 
-export const EnergyFlow: React.FC = () => {
+export interface EnergyFlowProps {
+  data: any
+}
+
+export const EnergyFlow: React.FC<EnergyFlowProps> = ({data}) => {
+  console.log(data.series[1].fields[0].values[0])
+  console.log(data.series[0].fields[1].values[0])
+  const grid = data.series[0].fields[1].values[0]
+  const pv = data.series[1].fields[0].values[0]
   const [flowData, setFlowData] = React.useState<FlowData>({
     flowType: FlowType.overConsumption,
     pv: 0,
@@ -20,14 +28,14 @@ export const EnergyFlow: React.FC = () => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      setFlowData(await EnergyFlowCore.getNewFlowData());
+      setFlowData(await EnergyFlowCore.getNewFlowData(pv, grid));
     }, 180000);
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     (async () => {
-      setFlowData(await EnergyFlowCore.getNewFlowData());
+      setFlowData(await EnergyFlowCore.getNewFlowData(pv, grid));
     })();
   }, []);
 
