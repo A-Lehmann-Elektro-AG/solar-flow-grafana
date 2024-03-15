@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "panel",
+  "name": "solar-flow",
+  "id": "solar-flow-panel",
+  "info": {
+    "keywords": ["panel", "solar", "flow", "production", "monitoring", "energy", "sun", "power", "electricity", "renewable", "sustainability", "solar panel", "solar panels",
+                  "solar energy", "solar power", "solar electricity", "solar production", "solar monitoring", "solar flow", "solar production flow"],
+    "description": "A panel plugin designed to visualize the production flow of solar panels within the Grafana monitoring platform. ",
+    "author": {
+      "name": "Lehmann Elektro"
+    },
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [],
+    "screenshots": [],
+    "version": "1.0.0",
+    "updated": "2024-03-15"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=10.3.3",
+    "plugins": []
+  }
+}
