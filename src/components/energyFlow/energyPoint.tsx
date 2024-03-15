@@ -8,18 +8,18 @@ interface PointProps {
 }
 
 export const bluePoint = {
-  stroke: 'rgb(125,201,255)',
-  filter: 'drop-shadow(0px 0px 5px rgba(86,160,211,0.8))',
+  stroke: 'rgb(0, 141, 209)',
+  filter: 'drop-shadow(0px 0px 5px rgb(0, 141, 209))',
 }
 
 export const purplePoint = {
-  stroke: 'rgb(202,129,255)',
-  filter: 'drop-shadow(0px 0px 5px rgba(178,121,217,0.8))',
+  stroke: 'rgb(232, 41, 26)',
+  filter: 'drop-shadow(0px 0px 5px rgb(232, 41, 26))',
 }
 
 export const yellowPoint = {
-  stroke: 'rgb(255,241,86)',
-  filter: 'drop-shadow(0px 0px 5px rgba(220,201,0,0.8))',
+  stroke: 'rgb(244, 174, 1)',
+  filter: 'drop-shadow(0px 0px 5px rgb(244, 174, 1))',
 }
 
 export function Point(props: PointProps) {
@@ -34,7 +34,7 @@ export function Point(props: PointProps) {
         <circle className="z-5" cx="100" cy="100" r={baseRadius} style={props.style} strokeWidth="1.5"
                 fill={...fill}/>
         <text fontSize={15} className="shadow-lg" x="100" y="130" textAnchor="middle">{props.value + "kw"}</text>
-        <svg xmlns="http://www.w3.org/2000/svg" x='68' y="50" height="65" viewBox="0 -960 960 960"
+        <svg xmlns="http://www.w3.org/2000/svg" x='68' y="50" height="65" fill={"#FFFFFF"} viewBox="0 -960 960 960"
              width="65">
           <path
             d={props.icon}/>
