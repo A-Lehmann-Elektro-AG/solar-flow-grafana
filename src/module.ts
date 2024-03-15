@@ -15,26 +15,9 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       name: 'Show series counter',
       defaultValue: false,
     })
-    .addRadio({
-      path: 'seriesCountSize',
-      defaultValue: 'lg',
-      name: 'Series counter size',
-      settings: {
-        options: [
-          {
-            value: 'sm',
-            label: 'Small',
-          },
-          {
-            value: 'md',
-            label: 'Medium',
-          },
-          {
-            value: 'lg',
-            label: 'Large',
-          },
-        ],
-      },
-      showIf: (config) => config.showSeriesCount,
+    .addBooleanSwitch({
+      path: 'showLegend',
+      name: 'Show legend',
+      defaultValue: false,
     });
 });
