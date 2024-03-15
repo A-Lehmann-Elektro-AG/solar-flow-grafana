@@ -1,5 +1,4 @@
 import {FlowData, FlowType} from "../../models/flow";
-import DataFetcher from "./dataFetcher";
 
 export class EnergyFlowCore {
   private static pv = 0;
@@ -14,8 +13,13 @@ export class EnergyFlowCore {
     this.grid = flowData.grid;
   }
 
-  public static async getNewFlowData(): Promise<FlowData> {
-    const data = await DataFetcher.fetchNewFlowData()
+  public static async getNewFlowData(pv: number, grid: number): Promise<FlowData> {
+    const data: FlowData = {
+      pv: pv,
+      grid: grid,
+      load: 0,
+      flowType: FlowType.undefined
+    }
     this.setFlowData(data)
 
     return {

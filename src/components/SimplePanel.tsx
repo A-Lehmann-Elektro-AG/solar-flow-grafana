@@ -29,7 +29,6 @@ const getStyles = () => {
 };
 
 export const SimplePanel: React.FC<Props> = ({options, data, width, height}) => {
-  // const theme = useTheme2();
   const styles = useStyles2(getStyles);
   return (
     <div
@@ -41,8 +40,11 @@ export const SimplePanel: React.FC<Props> = ({options, data, width, height}) => 
         `
       )}
     >
-      <div className={styles.textBox}>
-        <EnergyFlow/>
+      <div className={styles.textBox} style={{
+        marginLeft: width / 2 - 100,
+        marginBottom: height / 2 - 100
+      }}>
+        <EnergyFlow data={data} showLegend={options.showLegend}/>
         {/*<Point label="Load" value={12} style={bluePoint} icon="icons/electrical_services.svg"/>*/}
       </div>
     </div>
