@@ -2,8 +2,8 @@ import React, {useEffect} from 'react';
 import './index.css';
 import {bluePoint, Point, purplePoint, yellowPoint} from "./energyPoint";
 import {FlowData, FlowType} from "../../models/flow";
-import {EnergyLines} from "./energyLine";
 import {EnergyFlowCore} from "../../services/energyFlowCore";
+import {EnergyLines} from "./energyLine";
 
 export interface PointPosition {
   x: number;
@@ -39,14 +39,14 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data}) => {
     })();
   }, []);
 
+
   const pvPoint: PointPosition = {x: 275, y: 200};
   const loadPoint: PointPosition = {x: 100, y: 450};
   const gridPoint: PointPosition = {x: 450, y: 450};
 
   return (
-    <div className="node position-relative"
-         style={{height: '250px', top: '0px', left: '-35px'}}>
-      <div style={{position: 'absolute', top: '100px', left: '0px'}}>
+    <div style={{position: "absolute", left: "-175px", top: "-8px"}}>
+      <div>
         {/*<h3 style={{position: 'absolute', top: '-450px', left: '170px', width: "200px"}}>Energy Flow</h3>*/}
         <div className="line-holder" style={{position: 'absolute', bottom: '500px', left: '0px'}}>
           <svg width="500" height="500" style={{position: 'absolute', top: '50px', left: '0'}} viewBox='0 0 500 500'>
@@ -58,7 +58,7 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data}) => {
           <div className="point-holder" style={{position: 'absolute', top: '-300px', left: '150px'}}>
             <Point label="PV" value={flowData.pv} style={yellowPoint} icon="icons/solar-panel-solid.svg"/>
           </div>
-          <div className="point-holder" style={{position: 'absolute', top: '-110px', left: '50px'}}>
+          <div className="point-holder" style={{position: 'absolute', top: -110, left: '50px'}}>
             <Point label="Load" value={flowData.load} style={bluePoint} icon="icons/electrical_services.svg"/>
             <Point label="Grid" value={flowData.grid} style={purplePoint} icon='icons/electric_meter.svg'/></div>
         </div>

@@ -41,7 +41,10 @@ export const SimplePanel: React.FC<Props> = ({options, data, width, height}) => 
         `
       )}
     >
-      <div className={styles.textBox}>
+      <div className={styles.textBox} style={{
+        marginLeft: width / 2 - 100,
+        marginBottom: height / 2 - 100
+      }}>
         <EnergyFlow data={data}/>
         {/*<Point label="Load" value={12} style={bluePoint} icon="icons/electrical_services.svg"/>*/}
       </div>
