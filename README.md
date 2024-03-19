@@ -9,4 +9,5 @@ Solar-Flow is a simple visualization of solar panel production flow, designed to
 3. Provide the queries for PV and Grid data entries
 4. Adjust the panel settings to your needs and observe your solar Production/Consumption/Waste ratio on your dashboard
 
-![img_6.png](img_6.png)
+## Demo:
+![demo.gif](demo.gif)

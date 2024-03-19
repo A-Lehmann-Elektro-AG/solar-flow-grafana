@@ -49,7 +49,7 @@
         }
       ],
       "title": "Panel Title",
-      "type": "lehmann-grafplugintest-panel"
+      "type": "lehmannch-flow-panel"
     }
   ],
   "refresh": "",
