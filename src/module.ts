@@ -8,25 +8,25 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       path: 'solarColor',
       name: 'Solar Color',
       description: 'Color of the solar energy point',
-      defaultValue: 'yellow',
+      defaultValue: 'rgb(244, 174, 1)',
     })
     .addColorPicker({
       path: 'loadColor',
       name: 'Load Color',
       description: 'Color of the load energy point',
-      defaultValue: 'blue',
+      defaultValue: 'rgb(0, 141, 209)',
     })
     .addColorPicker({
       path: 'gridColor',
       name: 'Grid Color',
       description: 'Color of the grid energy point',
-      defaultValue: 'red',
+      defaultValue: 'rgb(232, 41, 26)',
     })
     .addColorPicker({
       path: 'linesColor',
       name: 'Lines Color',
       description: 'Color of the lines',
-      defaultValue: 'black',
+      defaultValue: 'rgb(104, 193, 255)',
     })
     .addBooleanSwitch({
       path: "valueFirst",
