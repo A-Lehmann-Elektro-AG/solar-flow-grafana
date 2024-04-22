@@ -43,6 +43,13 @@ In other words, if the value is the only/first data entry - check the parameter 
 ### 2. Show Legend
 Simply toggle to true if you want the load and grid energy points to be labeled for clearer understanding
 
+### Color Scheme
+You can define such colors as:
+- `Solar Color` - the color of the solar panel production flow
+- `Grid Color` - the color of the grid energy flow
+- `Load Color` - the color of the load energy flow
+- `Lines Color` - the color of the lines connecting the points
+
 ## Final Result (example):
 
 ![example.gif](example.gif)
@@ -60,3 +67,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 5. Run `sudo npm run dev` to start the actual plugin simultaneously
 6. Open `http://localhost:3000` in your browser and login with the default credentials (admin:admin)
 7. Add a new dashboard and add the Solar Flow plugin to it
+8. Create a new data source and provide the queries for the solar panel production data. Or create a grafana test data source

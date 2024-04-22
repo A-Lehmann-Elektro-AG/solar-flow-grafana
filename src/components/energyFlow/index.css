@@ -18,13 +18,11 @@
 .animated-line {
   stroke-dasharray: 17;
   animation: dash 1s linear infinite;
-  filter: drop-shadow(0 0 5px rgb(104, 193, 255));
 }
 
 .animated-line-reverse {
   stroke-dasharray: 17;
   animation: dash 1s linear infinite reverse;
-  filter: drop-shadow(0 0 5px rgb(104, 193, 255));
 }
 
 @keyframes dash {

@@ -6,4 +6,7 @@ export interface SimpleOptions {
   seriesCountSize: SeriesSize;
   valueFirst: boolean;
   showLegend: boolean;
+  solarColor: string;
+  loadColor: string;
+  gridColor: string;
 }

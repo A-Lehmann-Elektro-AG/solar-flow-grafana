@@ -19,4 +19,5 @@ export interface CustomXarrowProps {
  end: PointPosition;
  className?: string;
  strokeWidth?: number;
+ linesColor?: string;
 }
