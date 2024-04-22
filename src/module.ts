@@ -4,20 +4,40 @@ import {SimplePanel} from './components/SimplePanel';
 
 export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions((builder) => {
   return builder
-    .addTextInput({
-      path: 'text',
-      name: 'Simple text option',
-      description: 'Description of panel option',
-      defaultValue: 'Default value of text input option',
+    .addColorPicker({
+      path: 'solarColor',
+      name: 'Solar Color',
+      description: 'Color of the solar energy point',
+      defaultValue: 'rgb(244, 174, 1)',
+    })
+    .addColorPicker({
+      path: 'loadColor',
+      name: 'Load Color',
+      description: 'Color of the load energy point',
+      defaultValue: 'rgb(0, 141, 209)',
+    })
+    .addColorPicker({
+      path: 'gridColor',
+      name: 'Grid Color',
+      description: 'Color of the grid energy point',
+      defaultValue: 'rgb(232, 41, 26)',
+    })
+    .addColorPicker({
+      path: 'linesColor',
+      name: 'Lines Color',
+      description: 'Color of the lines',
+      defaultValue: 'rgb(104, 193, 255)',
     })
     .addBooleanSwitch({
-      path: 'showSeriesCount',
-      name: 'Show series counter',
-      defaultValue: false,
+      path: "valueFirst",
+      name: 'Value First',
+      description: 'The query value result is the only/first data entry, if not - uncheck',
+      defaultValue: true,
     })
     .addBooleanSwitch({
       path: 'showLegend',
       name: 'Show legend',
+      description: 'Label the energy points',
       defaultValue: false,
     });
 });

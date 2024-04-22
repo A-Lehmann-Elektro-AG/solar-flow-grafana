@@ -6,7 +6,7 @@ interface PointProps {
   value: number;
   style: any;
   icon: string;
-  showLegend?: boolean;
+  showLegend?: any;
 }
 
 export const bluePoint = {
@@ -22,6 +22,13 @@ export const purplePoint = {
 export const yellowPoint = {
   stroke: 'rgb(244, 174, 1)',
   filter: 'drop-shadow(0px 0px 2px rgb(244, 174, 1))',
+}
+
+export const customPoint = (color: string) => {
+  return {
+    stroke: color,
+    filter: `drop-shadow(0px 0px 2px ${color})`,
+  };
 }
 
 function legendComponent(fontColor: string, label: string) {

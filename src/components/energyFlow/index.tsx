@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import './index.css';
-import {bluePoint, Point, purplePoint, yellowPoint} from "./energyPoint";
+import {customPoint, Point} from "./energyPoint";
 import {FlowData, FlowType} from "../../models/flow";
 import {EnergyFlowCore} from "../../services/energyFlowCore";
 import {EnergyLines} from "./energyLine";
@@ -12,14 +12,13 @@ export interface PointPosition {
 
 export interface EnergyFlowProps {
   data: any,
-  showLegend: boolean
+  options: any
 }
 
-export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, showLegend}) => {
-  console.log(data.series[1].fields[0].values[0])
-  console.log(data.series[0].fields[1].values[0])
-  const grid = data.series[0].fields[1].values[0]
-  const pv = data.series[1].fields[0].values[0]
+export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
+  const fieldPosition = Number(!options.valueFirst);
+  const grid = data.series[0].fields[fieldPosition].values[0]
+  const pv = data.series[1].fields[fieldPosition].values[0]
   const [flowData, setFlowData] = React.useState<FlowData>({
     flowType: FlowType.overConsumption,
     pv: 0,
@@ -55,17 +54,17 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, showLegend}) => {
         {/*<h3 style={{position: 'absolute', top: '-450px', left: '170px', width: "200px"}}>Energy Flow</h3>*/}
         <div className="line-holder" style={{position: 'absolute', bottom: '500px', left: '0px'}}>
           <svg width="500" height="500" style={{position: 'absolute', top: '50px', left: '0'}} viewBox='0 0 500 500'>
-            <EnergyLines flow={flowData.flowType} pvPoint={pvPoint} loadPoint={loadPoint} gridPoint={gridPoint}/>
+            <EnergyLines flow={flowData.flowType} pvPoint={pvPoint} linesColor={options.linesColor} loadPoint={loadPoint} gridPoint={gridPoint}/>
           </svg>
         </div>
 
         <div className="line-holder" style={{position: 'absolute', bottom: '0px', left: '25px'}}>
           <div className="point-holder" style={{position: 'absolute', top: '-300px', left: '150px'}}>
-            <Point label="PV" value={flowData.pv} style={yellowPoint} icon={pvSVG}/>
+            <Point label="PV" showLegend={false} value={flowData.pv} style={customPoint(options.solarColor)} icon={pvSVG}/>
           </div>
           <div className="point-holder" style={{position: 'absolute', top: -110, left: '50px'}}>
-            <Point showLegend={showLegend} label="Load" value={flowData.load} style={bluePoint} icon={loadSVG}/>
-            <Point showLegend={showLegend} label="Grid" value={flowData.grid} style={purplePoint} icon={gridSVG}/></div>
+            <Point showLegend={options.showLegend} label="Load" value={flowData.load} style={customPoint(options.loadColor)} icon={loadSVG}/>
+            <Point showLegend={options.showLegend} label="Grid" value={flowData.grid} style={customPoint(options.gridColor)} icon={gridSVG}/></div>
         </div>
       </div>
     </div>
