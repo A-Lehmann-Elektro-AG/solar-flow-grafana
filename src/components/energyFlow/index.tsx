@@ -12,14 +12,14 @@ export interface PointPosition {
 
 export interface EnergyFlowProps {
   data: any,
-  showLegend: boolean
+  showLegend: boolean,
+  valueFirst: boolean
 }
 
-export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, showLegend}) => {
-  console.log(data.series[1].fields[0].values[0])
-  console.log(data.series[0].fields[1].values[0])
-  const grid = data.series[0].fields[1].values[0]
-  const pv = data.series[1].fields[0].values[0]
+export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, showLegend, valueFirst}) => {
+  const fieldPosition = Number(!valueFirst);
+  const grid = data.series[0].fields[fieldPosition].values[0]
+  const pv = data.series[1].fields[fieldPosition].values[0]
   const [flowData, setFlowData] = React.useState<FlowData>({
     flowType: FlowType.overConsumption,
     pv: 0,

@@ -11,19 +11,19 @@ interface Props extends PanelProps<SimpleOptions> {
 const getStyles = () => {
   return {
     wrapper: css`
-      font-family: Open Sans;
-      position: relative;
+        font-family: Open Sans;
+        position: relative;
     `,
     svg: css`
-      position: absolute;
-      top: 0;
-      left: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
     `,
     textBox: css`
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      padding: 10px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        padding: 10px;
     `,
   };
 };
@@ -35,8 +35,8 @@ export const SimplePanel: React.FC<Props> = ({options, data, width, height}) => 
       className={cx(
         styles.wrapper,
         css`
-          width: ${width}px;
-          height: ${height}px;
+            width: ${width}px;
+            height: ${height}px;
         `
       )}
     >
@@ -44,7 +44,7 @@ export const SimplePanel: React.FC<Props> = ({options, data, width, height}) => 
         marginLeft: width / 2 - 100,
         marginBottom: height / 2 - 100
       }}>
-        <EnergyFlow data={data} showLegend={options.showLegend}/>
+        <EnergyFlow data={data} showLegend={options.showLegend} valueFirst={options.valueFirst}/>
         {/*<Point label="Load" value={12} style={bluePoint} icon="icons/electrical_services.svg"/>*/}
       </div>
     </div>

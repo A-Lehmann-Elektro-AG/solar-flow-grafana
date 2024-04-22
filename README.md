@@ -1,6 +1,7 @@
 # Solar Flow Visualisation
 
-Solar Flow is a simple animated visualization of solar panel production flow, designed to be displayed as a plugin on a Grafana dashboard.
+Solar Flow is a simple animated visualization of solar panel production flow, designed to be displayed as a plugin on a
+Grafana dashboard.
 
 ## Installation
 
@@ -10,8 +11,11 @@ Solar Flow is a simple animated visualization of solar panel production flow, de
 4. Adjust the panel settings to your needs and observe your solar Production/Consumption/Waste ratio on your dashboard
 
 ## Data Source Queries/Requirements
+
 In the example below, following queries are used to display the solar panel production flow in our case:
+
 ### Grid Query:
+
 ```sql
  from(bucket: "your-bucket")
   |> range(start: -5m)
@@ -20,21 +24,28 @@ In the example below, following queries are used to display the solar panel prod
   |> aggregateWindow(every: 5m, fn: sum, createEmpty: false)
   |> last()
   ```
+
 ### PV Query:
+
 ```sql
 from(bucket: "your-bucket")
   |> range(start: -5m)
   |> mean()
   ```
+
 As you can see we use the last 5 minutes of data to display the current state of the solar panel production flow.
 Make sure there's only one entry for each query, otherwise the plugin will not work as expected.
 
->[!NOTE]
-> The queries are written in Flux language, which is used by InfluxDB. You can use any other query language that is supported by your data source. 
+> [!NOTE]
+> The queries are written in Flux language, which is used by InfluxDB. You can use any other query language that is
+> supported by your data source.
+
+> [!WARNING]
+> The queries must be sent in this order 1: Solar data 2: Grid data
 
 ## Final Result (example):
-![example.gif](example.gif)
 
+![example.gif](example.gif)
 
 ## Contributing
 
