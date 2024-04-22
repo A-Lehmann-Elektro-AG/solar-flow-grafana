@@ -10,38 +10,38 @@ Grafana dashboard.
 3. Provide the queries for PV and Grid data entries
 4. Adjust the panel settings to your needs and observe your solar Production/Consumption/Waste ratio on your dashboard
 
-## Data Source Queries/Requirements
-
-In the example below, following queries are used to display the solar panel production flow in our case:
-
-### Grid Query:
-
-```sql
- from(bucket: "your-bucket")
-  |> range(start: -5m)
-  |> aggregateWindow(every: 5m, fn: mean, createEmpty: false)
-  |> group()
-  |> aggregateWindow(every: 5m, fn: sum, createEmpty: false)
-  |> last()
-  ```
-
-### PV Query:
-
-```sql
-from(bucket: "your-bucket")
-  |> range(start: -5m)
-  |> mean()
-  ```
-
-As you can see we use the last 5 minutes of data to display the current state of the solar panel production flow.
-Make sure there's only one entry for each query, otherwise the plugin will not work as expected.
-
-> [!NOTE]
-> The queries are written in Flux language, which is used by InfluxDB. You can use any other query language that is
-> supported by your data source.
+## Data Requirements
 
 > [!WARNING]
-> The queries must be sent in this order 1: Solar data 2: Grid data
+> 1. The queries must be sent in this order 1: Grid data 2: Solar data
+![img.png](img.png)
+> 2. The parameter `Value First` must be adjusted according to your database's timestamp presence/absence. Read below.
+## Options
+
+Our plugin has two options that can be adjusted to your needs:
+
+### 1. Value First:
+Depending on the fact if your database sends a timestamp with the actual value, you have to toggle the parameter according to the timestamp's absence/presence  
+In other words, if the value is the only/first data entry - check the parameter to true, otherwise - false. Examples below:
+```
+  "data": {
+    "values": [
+       [10] <--- First and only data entry. Value First - true
+    ]
+  }
+```
+```
+  "data": {
+    "values": [
+      [1713751547175], <--- First data entry
+      [10] <--- Second data entry. Value First - false
+    ]
+  }
+```
+>[!NOTE]
+> Use the query inspector in order to see if you receive the timestamp alongside with the value
+### 2. Show Legend
+Simply toggle to true if you want the load and grid energy points to be labeled for clearer understanding
 
 ## Final Result (example):
 
