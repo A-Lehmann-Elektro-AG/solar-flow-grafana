@@ -4,20 +4,16 @@ import {SimplePanel} from './components/SimplePanel';
 
 export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions((builder) => {
   return builder
-    .addTextInput({
-      path: 'text',
-      name: 'Simple text option',
-      description: 'Description of panel option',
-      defaultValue: 'Default value of text input option',
-    })
     .addBooleanSwitch({
-      path: 'showSeriesCount',
-      name: 'Show series counter',
-      defaultValue: false,
+      path: "valueFirst",
+      name: 'Value First',
+      description: 'The query value result is the only/first data entry, if not - uncheck',
+      defaultValue: true,
     })
     .addBooleanSwitch({
       path: 'showLegend',
       name: 'Show legend',
+      description: 'Label the energy points',
       defaultValue: false,
     });
 });
