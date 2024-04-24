@@ -54,7 +54,6 @@ function legendComponent(fontColor: string, label: string) {
   }
 
   let legend = null;
-    console.log(props.showLegend)
   if (props.showLegend) {
     legend = legendComponent(fontColor, props.label);
   }

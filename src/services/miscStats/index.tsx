@@ -23,8 +23,6 @@ const MiscStats: React.FC = () => {
     }
 
     const co2Reduction = ((dailyData * 0.846) / 2240);
-    console.log("Tägliche Produktion: " + dailyData)
-    console.log("CO2 Reduktion: " + co2Reduction);
     setCo2Reduction(Math.round(co2Reduction * 10) / 10);
   }
 

@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
-  "name": "solar-flow",
+  "name": "Solar Flow",
   "id": "lehmannch-flow-panel",
   "info": {
     "keywords": ["panel", "solar", "flow", "production", "monitoring", "energy", "sun", "power", "electricity", "renewable", "sustainability", "solar panel", "solar panels",
