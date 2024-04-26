@@ -4,6 +4,41 @@ import {SimplePanel} from './components/SimplePanel';
 
 export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions((builder) => {
   return builder
+    .addSliderInput(
+      {
+        path: 'zoom',
+        name: 'Zoom',
+        description: 'Zoom level of the energy flow',
+        defaultValue: 1,
+        settings: {
+          min: 0.1,
+          max: 3,
+          step: 0.05,
+        },
+      }
+    )
+    .addSliderInput({
+      path: 'xOffset',
+      name: 'X-Offset',
+      defaultValue:   0,
+      settings: {
+        min: -500,
+        max: 500,
+        step: 1,
+      },
+    })
+    .addSliderInput(
+      {
+        path: 'yOffset',
+        name: 'Y-Offset',
+        defaultValue: 0,
+        settings: {
+          min: -500,
+          max: 500,
+          step: 1,
+        },
+      }
+    )
     .addColorPicker({
       path: 'solarColor',
       name: 'Solar Color',

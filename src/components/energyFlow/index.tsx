@@ -52,7 +52,7 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
   const loadSVG = `M720-360v-80h80q17 0 28.5 11.5T840-400q0 17-11.5 28.5T800-360h-80Zm0 160v-80h80q17 0 28.5 11.5T840-240q0 17-11.5 28.5T800-200h-80Zm-160 40q-33 0-56.5-23.5T480-240h-80v-160h80q0-33 23.5-56.5T560-480h120v320H560ZM280-280q-66 0-113-47t-47-113q0-66 47-113t113-47h60q25 0 42.5-17.5T400-660q0-25-17.5-42.5T340-720H200q-17 0-28.5-11.5T160-760q0-17 11.5-28.5T200-800h140q58 0 99 41t41 99q0 58-41 99t-99 41h-60q-33 0-56.5 23.5T200-440q0 33 23.5 56.5T280-360h80v80h-80Z`
 
   return (
-    <div style={{position: "absolute", left: "-175px", top: "-8px"}}>
+    <div style={{position: "absolute", left: `${(-175 + options.xOffset) * options.zoom}px`, top: `${(-8 - options.yOffset) * options.zoom}px`, transform: `scale(${options.zoom})`}}>
       <div>
         {/*<h3 style={{position: 'absolute', top: '-450px', left: '170px', width: "200px"}}>Energy Flow</h3>*/}
         <div className="line-holder" style={{position: 'absolute', bottom: '500px', left: '0px'}}>

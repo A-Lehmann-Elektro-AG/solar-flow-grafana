@@ -9,4 +9,7 @@ export interface SimpleOptions {
   solarColor: string;
   loadColor: string;
   gridColor: string;
+  zoom: number;
+  xOffset: number;
+  yOffset: number;
 }
