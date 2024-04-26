@@ -8,7 +8,6 @@ export interface BarData {
 const getMonthData = async (): Promise<number[]> => {
   const monthData: number[] = [];
   const dailyProduction = await DataFetcher.fetchDailyData();
-  console.log("dailyProduction", dailyProduction);
   for (let i = 0; i <= dailyProduction.length + 2; i++) {
     if (i + 1 <= dailyProduction.length - (new Date().getDate())) {
       continue;
@@ -20,7 +19,6 @@ const getMonthData = async (): Promise<number[]> => {
 
 export async function getDailyProduction() {
   const monthValues = await getMonthData();
-  console.log("monthValues", monthValues);
   const newMonthData: BarData[] = [];
   for (let i = 0; i <= 30; i++) {
     let name = `${i + 1}.${new Date().getMonth() + 1}`;

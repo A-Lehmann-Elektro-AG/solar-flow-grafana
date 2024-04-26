@@ -4,28 +4,64 @@ import {SimplePanel} from './components/SimplePanel';
 
 export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions((builder) => {
   return builder
+    .addSliderInput(
+      {
+        path: 'zoom',
+        name: 'Zoom',
+        defaultValue: 1,
+        settings: {
+          min: 0.1,
+          max: 3,
+          step: 0.05,
+        },
+      }
+    )
+    .addSliderInput({
+      path: 'xOffset',
+      name: 'Offset',
+      description: 'X-Offset',
+      defaultValue:   0,
+      settings: {
+        min: -500,
+        max: 500,
+        step: 1,
+      },
+    })
+    .addSliderInput(
+      {
+        path: 'yOffset',
+        name: '',
+        description: 'Y-Offset',
+        defaultValue: 0,
+        settings: {
+          min: -500,
+          max: 500,
+          step: 1,
+        },
+      }
+    )
     .addColorPicker({
       path: 'solarColor',
-      name: 'Solar Color',
-      description: 'Color of the solar energy point',
+      name: 'Color palette',
+      description: 'Solar Color',
       defaultValue: 'rgb(244, 174, 1)',
     })
     .addColorPicker({
       path: 'loadColor',
-      name: 'Load Color',
-      description: 'Color of the load energy point',
+      name: '',
+      description: 'Load Color',
       defaultValue: 'rgb(0, 141, 209)',
     })
     .addColorPicker({
       path: 'gridColor',
-      name: 'Grid Color',
-      description: 'Color of the grid energy point',
+      name: '',
+      description: 'Grid Color',
       defaultValue: 'rgb(232, 41, 26)',
     })
     .addColorPicker({
       path: 'linesColor',
-      name: 'Lines Color',
-      description: 'Color of the lines',
+      name: '',
+      description: 'Lines Color',
       defaultValue: 'rgb(104, 193, 255)',
     })
     .addBooleanSwitch({

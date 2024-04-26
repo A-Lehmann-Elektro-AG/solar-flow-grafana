@@ -4,6 +4,7 @@ import {customPoint, Point} from "./energyPoint";
 import {FlowData, FlowType} from "../../models/flow";
 import {EnergyFlowCore} from "../../services/energyFlowCore";
 import {EnergyLines} from "./energyLine";
+import {useTheme} from "@grafana/ui";
 
 export interface PointPosition {
   x: number;
@@ -16,6 +17,8 @@ export interface EnergyFlowProps {
 }
 
 export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
+  const theme = useTheme();
+  
   const fieldPosition = Number(!options.valueFirst);
   const grid = data.series[0].fields[fieldPosition].values[0]
   const pv = data.series[1].fields[fieldPosition].values[0]
@@ -49,22 +52,24 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
   const loadSVG = `M720-360v-80h80q17 0 28.5 11.5T840-400q0 17-11.5 28.5T800-360h-80Zm0 160v-80h80q17 0 28.5 11.5T840-240q0 17-11.5 28.5T800-200h-80Zm-160 40q-33 0-56.5-23.5T480-240h-80v-160h80q0-33 23.5-56.5T560-480h120v320H560ZM280-280q-66 0-113-47t-47-113q0-66 47-113t113-47h60q25 0 42.5-17.5T400-660q0-25-17.5-42.5T340-720H200q-17 0-28.5-11.5T160-760q0-17 11.5-28.5T200-800h140q58 0 99 41t41 99q0 58-41 99t-99 41h-60q-33 0-56.5 23.5T200-440q0 33 23.5 56.5T280-360h80v80h-80Z`
 
   return (
-    <div style={{position: "absolute", left: "-175px", top: "-8px"}}>
+    <div style={{position: "absolute", left: `${(-175 + options.xOffset) * options.zoom}px`, top: `${(-8 - options.yOffset) * options.zoom}px`, transform: `scale(${options.zoom})`}}>
       <div>
         {/*<h3 style={{position: 'absolute', top: '-450px', left: '170px', width: "200px"}}>Energy Flow</h3>*/}
         <div className="line-holder" style={{position: 'absolute', bottom: '500px', left: '0px'}}>
           <svg width="500" height="500" style={{position: 'absolute', top: '50px', left: '0'}} viewBox='0 0 500 500'>
-            <EnergyLines flow={flowData.flowType} pvPoint={pvPoint} linesColor={options.linesColor} loadPoint={loadPoint} gridPoint={gridPoint}/>
+            <EnergyLines flow={flowData.flowType} pvPoint={pvPoint} linesColor={(options.linesColor)} loadPoint={loadPoint} gridPoint={gridPoint}/>
           </svg>
         </div>
 
         <div className="line-holder" style={{position: 'absolute', bottom: '0px', left: '25px'}}>
           <div className="point-holder" style={{position: 'absolute', top: '-300px', left: '150px'}}>
-            <Point label="PV" showLegend={false} value={flowData.pv} style={customPoint(options.solarColor)} icon={pvSVG}/>
+            <Point label="PV" showLegend={false} value={flowData.pv} style={customPoint(theme.visualization.getColorByName(options.solarColor))} icon={pvSVG}/>
           </div>
           <div className="point-holder" style={{position: 'absolute', top: -110, left: '50px'}}>
-            <Point showLegend={options.showLegend} label="Load" value={flowData.load} style={customPoint(options.loadColor)} icon={loadSVG}/>
-            <Point showLegend={options.showLegend} label="Grid" value={flowData.grid} style={customPoint(options.gridColor)} icon={gridSVG}/></div>
+            <Point showLegend={options.showLegend} label="Load" value={flowData.load}
+                   style={customPoint(theme.visualization.getColorByName(options.loadColor))} icon={loadSVG}/>
+            <Point showLegend={options.showLegend} label="Grid" value={flowData.grid}
+                   style={customPoint(theme.visualization.getColorByName(options.gridColor))} icon={gridSVG}/></div>
         </div>
       </div>
     </div>

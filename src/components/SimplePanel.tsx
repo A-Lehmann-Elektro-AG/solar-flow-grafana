@@ -11,7 +11,6 @@ interface Props extends PanelProps<SimpleOptions> {
 const getStyles = () => {
   return {
     wrapper: css`
-        font-family: Open Sans;
         position: relative;
     `,
     svg: css`
