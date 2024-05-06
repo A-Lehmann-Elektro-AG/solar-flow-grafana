@@ -4,6 +4,18 @@ import {SimplePanel} from './components/SimplePanel';
 
 export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions((builder) => {
   return builder
+    .addFieldNamePicker({
+      path: 'solarQuery',
+      name: 'Solar Query',
+      description: 'Select the query for the solar data',
+      defaultValue: '',
+    })
+    .addFieldNamePicker({
+      path: 'gridQuery',
+      name: 'Grid Query',
+      description: 'Select the query for the load data',
+      defaultValue: '',
+    })
     .addSliderInput(
       {
         path: 'zoom',
