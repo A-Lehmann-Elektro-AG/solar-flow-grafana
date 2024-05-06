@@ -12,4 +12,6 @@ export interface SimpleOptions {
   zoom: number;
   xOffset: number;
   yOffset: number;
+  solarQuery: any;
+  gridQuery: any;
 }
