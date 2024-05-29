@@ -6,14 +6,14 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
   return builder
     .addFieldNamePicker({
       path: 'solarQuery',
-      name: 'Solar Query',
-      description: 'Select the query for the solar data',
+      name: 'Solar Value',
+      description: 'Select the field for the solar data',
       defaultValue: '',
     })
     .addFieldNamePicker({
       path: 'gridQuery',
-      name: 'Grid Query',
-      description: 'Select the query for the load data',
+      name: 'Grid Value',
+      description: 'Select the field for the load data',
       defaultValue: '',
     })
     .addSliderInput(
@@ -75,12 +75,6 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       name: '',
       description: 'Lines Color',
       defaultValue: 'rgb(104, 193, 255)',
-    })
-    .addBooleanSwitch({
-      path: "valueFirst",
-      name: 'Value First',
-      description: 'The query value result is the only/first data entry, if not - uncheck',
-      defaultValue: true,
     })
     .addBooleanSwitch({
       path: 'showLegend',

@@ -23,12 +23,18 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
   let grid = options.solarQuery;
   let pv = data.series[1]?.fields[fieldPosition].values[0] || 0;
   
-  for(let i = 0; i < data.series.length; i++) {
-    if (data.series[i].refId === options.solarQuery.split("-")[0]) {
-      pv = data.series[i].fields[fieldPosition].values[0];
+  // foreach serie.field in data.serie
+  
+  for(let seriesIndex = 0; seriesIndex < data.series.length; seriesIndex++) {
+    for(let fieldIndex = 0; fieldIndex < data.series[seriesIndex].fields.length; fieldIndex++) {
+      if (data.series[seriesIndex].fields[fieldIndex].name === options.solarQuery) {
+        pv = data.series[seriesIndex].fields[fieldIndex].values[0];
+      }
     }
-    if (data.series[i].refId === options.gridQuery.split("-")[0]) {
-      grid = data.series[i].fields[fieldPosition].values[0];
+    for(let fieldIndex = 0; fieldIndex < data.series[seriesIndex].fields.length; fieldIndex++) {
+      if (data.series[seriesIndex].fields[fieldIndex].name === options.gridQuery) {
+        grid = data.series[seriesIndex].fields[fieldIndex].values[0];
+      }
     }
   }
   const [flowData, setFlowData] = React.useState<FlowData>({
@@ -50,8 +56,8 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
       setFlowData(await EnergyFlowCore.getNewFlowData(pv, grid));
     })();
   }, [grid, pv]);
-  
-  
+
+
   const pvPoint: PointPosition = {x: 275, y: 200};
   const loadPoint: PointPosition = {x: 100, y: 460};
   const gridPoint: PointPosition = {x: 450, y: 460};
@@ -60,16 +66,16 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
   const pvSVG = `M133.847-800v-59.999h114.231V-800H133.847Zm-29.614 699.229h345.768v-149.23H133.925l-29.692 149.23Zm138.459-488.152-42.768-41.768 80.769-80.769 42.768 41.768-80.769 80.769Zm-96.614 278.924h303.923v-150.384H176.155l-30.077 150.384ZM480-679.615q-75.307 0-128.037-52.731-52.731-52.73-52.731-128.037h361.536q0 75.307-52.731 128.037-52.73 52.731-128.037 52.731Zm-29.999 163.461v-114.23h59.998v114.23h-59.998Zm59.998 415.383h345.384l-29.692-149.23H509.999v149.23Zm0-209.228h303.538L783.46-460.383H509.999v150.384Zm208.078-278.54-80.538-81.153 41.768-41.768 81.538 80.153-42.768 42.768ZM711.922-800v-59.999h114.231V-800H711.922Z`
   const loadSVG = `M720-360v-80h80q17 0 28.5 11.5T840-400q0 17-11.5 28.5T800-360h-80Zm0 160v-80h80q17 0 28.5 11.5T840-240q0 17-11.5 28.5T800-200h-80Zm-160 40q-33 0-56.5-23.5T480-240h-80v-160h80q0-33 23.5-56.5T560-480h120v320H560ZM280-280q-66 0-113-47t-47-113q0-66 47-113t113-47h60q25 0 42.5-17.5T400-660q0-25-17.5-42.5T340-720H200q-17 0-28.5-11.5T160-760q0-17 11.5-28.5T200-800h140q58 0 99 41t41 99q0 58-41 99t-99 41h-60q-33 0-56.5 23.5T200-440q0 33 23.5 56.5T280-360h80v80h-80Z`
 
-  if(data.series.length < 2 || typeof pv !== "number" || typeof grid !== "number") {
+  if(data.series.length < 1 || typeof pv !== "number" || typeof grid !== "number") {
     return (
       <div style={{backgroundColor: "red", padding: "5%", borderRadius: "5px", width: "200px", textAlign: "center"}}>
-        <h3>Invalid/Missing data in one of the queries</h3> 
+        <h3>Invalid/Missing data in one of the queries</h3>
       </div>
     );
   }
-  
+
   return (
-    <div style={{position: "absolute", left: `${(-175 + options.xOffset) * options.zoom}px`, top: `${(-8 - options.yOffset) * options.zoom}px`, transform: `scale(${options.zoom})`}}>
+    <div style={{position: "absolute", left: `${(-175 + options.xOffset) * options.zoom}px`, top: `${(-8 - options.yOffset) * options.zoom}px`, transform: `scale(${options.zoom})`, transformOrigin: 'center'}}>
       <div>
         {/*<h3 style={{position: 'absolute', top: '-450px', left: '170px', width: "200px"}}>Energy Flow</h3>*/}
         <div className="line-holder" style={{position: 'absolute', bottom: '500px', left: '0px'}}>
