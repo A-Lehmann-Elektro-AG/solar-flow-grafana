@@ -6,44 +6,34 @@ Grafana dashboard.
 ## Installation
 
 1. Add the Solar Flow plugin to your Grafana dashboard
-2. Create a data source of your solar panel production data (Watch the example queries below
-3. Provide the queries for PV and Grid data entries
+2. Create a data source of your solar panel production data
+3. Provide the query for the PV and Grid data in the plugin settings
 4. Adjust the panel settings to your needs and observe your solar Production/Consumption/Waste ratio on your dashboard
 
 ## Data Requirements
 
-> [!WARNING]
-> 1. The queries must be sent in this order 1: Grid data 2: Solar data
-![img.png](img.png)
-> 2. The parameter `Value First` must be adjusted according to your database's timestamp presence/absence. Read below.
+The plugin is expecting to receive the PV and Grid data in one query. If your data is stored in two separate tables, you can use Grafana's Data-Merge feature to combine them into one query. (Refer to Grafana's [documentation](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/#transform-data) for more information)
+
 ## Options
 
-Our plugin has two options that can be adjusted to your needs:
+Our plugin has some options that can be adjusted to your needs:
 
-### 1. Value First:
-Depending on the fact if your database sends a timestamp with the actual value, you have to toggle the parameter according to the timestamp's absence/presence  
-In other words, if the value is the only/first data entry - check the parameter to true, otherwise - false. Examples below:
-```
-  "data": {
-    "values": [
-       [10] <--- First and only data entry. Value First - true
-    ]
-  }
-```
-```
-  "data": {
-    "values": [
-      [1713751547175], <--- First data entry
-      [10] <--- Second data entry. Value First - false
-    ]
-  }
-```
->[!NOTE]
-> Use the query inspector in order to see if you receive the timestamp alongside with the value
-### 2. Show Legend
+### Solar/Grid Value:
+These two are the most important settings in the plugin. They define the fields from your data source that contain the solar
+panel production and grid energy data. The plugin will use these values to calculate the load energy and visualize the flow of energy.
+![img_1.png](img_1.png)
+After you provided an appropriate data source and query, you need to choose the Solar and Grid values from the dropdown list.
+
+### Zoom
+This settings allows you to scale the visualization to your needs.
+
+### Offset
+Allows you to adjust the offset of the plugin.
+
+### Show Legend
 Simply toggle to true if you want the load and grid energy points to be labeled for clearer understanding
 
-### Color Scheme
+### Color Palette
 You can define such colors as:
 - `Solar Color` - the color of the solar panel production flow
 - `Grid Color` - the color of the grid energy flow
