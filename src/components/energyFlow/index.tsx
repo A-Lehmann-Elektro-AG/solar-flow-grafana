@@ -45,13 +45,6 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
   });
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      setFlowData(await EnergyFlowCore.getNewFlowData(pv, grid));
-    }, 180000);
-    return () => clearInterval(interval);
-  }, [grid, pv]);
-
-  useEffect(() => {
     (async () => {
       setFlowData(await EnergyFlowCore.getNewFlowData(pv, grid));
     })();

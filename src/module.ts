@@ -56,7 +56,7 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       path: 'solarColor',
       name: 'Color palette',
       description: 'Solar Color',
-      defaultValue: 'rgb(244, 174, 1)',
+      defaultValue: 'rgb(244, 174,` 1)',
     })
     .addColorPicker({
       path: 'loadColor',
