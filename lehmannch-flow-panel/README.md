@@ -1,51 +1,59 @@
-<!-- This README file is going to be the one displayed on the Grafana.com website for your plugin. Uncomment and replace the content here before publishing.
+# Solar Flow Visualisation
 
-Remove any remaining comments before publishing as these may be displayed on Grafana.com -->
+Solar Flow is a simple animated visualization of solar panel production flow, designed to be displayed as a plugin on a
+Grafana dashboard.
 
-# Grafplugin-Test
+## Installation
 
-Test grafana plugin
+1. Add the Solar Flow plugin to your Grafana dashboard
+2. Create a data source of your solar panel production data
+3. Provide the query for the PV and Grid data in the plugin settings
+4. Adjust the panel settings to your needs and observe your solar Production/Consumption/Waste ratio on your dashboard
 
-<!-- To help maximize the impact of your README and improve usability for users, we propose the following loose structure:
+## Data Requirements
 
-**BEFORE YOU BEGIN**
-- Ensure all links are absolute URLs so that they will work when the README is displayed within Grafana and Grafana.com
-- Be inspired ✨
-  - [grafana-polystat-panel](https://github.com/grafana/grafana-polystat-panel)
-  - [volkovlabs-variable-panel](https://github.com/volkovlabs/volkovlabs-variable-panel)
+The plugin is expecting to receive the PV and Grid data in one query. If your data is stored in two separate tables, you can use Grafana's Data-Merge feature to combine them into one query. (Refer to Grafana's [documentation](https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/transform-data/#transform-data) for more information)
 
-**ADD SOME BADGES**
+## Options
 
-Badges convey useful information at a glance for users whether in the Catalog or viewing the source code. You can use the generator on [Shields.io](https://shields.io/badges/dynamic-json-badge) together with the Grafana.com API
-to create dynamic badges that update automatically when you publish a new version to the marketplace.
+Our plugin has some options that can be adjusted to your needs:
 
-- For the logo field use 'grafana'.
-- Examples (label: query)
-  - Downloads: $.downloads
-  - Catalog Version: $.version
-  - Grafana Dependency: $.grafanaDependency
-  - Signature Type: $.versionSignatureType
+### Solar/Grid Value:
+These two are the most important settings in the plugin. They define the fields from your data source that contain the solar
+panel production and grid energy data. The plugin will use these values to calculate the load energy and visualize the flow of energy.
+After you provided an appropriate data source and query, you need to choose the Solar and Grid values from the dropdown list.
 
-Full example: ![Dynamic JSON Badge](https://img.shields.io/badge/dynamic/json?logo=grafana&query=$.version&url=https://grafana.com/api/plugins/grafana-polystat-panel&label=Marketplace&prefix=v&color=F47A20)
+### Zoom
+This settings allows you to scale the visualization to your needs.
 
-Consider other [badges](https://shields.io/badges) as you feel appropriate for your project.
+### Offset
+Allows you to adjust the offset of the plugin.
 
-## Overview / Introduction
-Provide one or more paragraphs as an introduction to your plugin to help users understand why they should use it.
+### Show Legend
+Simply toggle to true if you want the load and grid energy points to be labeled for clearer understanding
 
-Consider including screenshots:
-- in [plugin.json](https://grafana.com/developers/plugin-tools/reference-plugin-json#info) include them as relative links.
-- in the README ensure they are absolute URLs.
+### Color Palette
+You can define such colors as:
+- `Solar Color` - the color of the solar panel production flow
+- `Grid Color` - the color of the grid energy flow
+- `Load Color` - the color of the load energy flow
+- `Lines Color` - the color of the lines connecting the points
 
-## Requirements
-List any requirements or dependencies they may need to run the plugin.
+## Final Result (example):
 
-## Getting Started
-Provide a quick start on how to configure and use the plugin.
-
-## Documentation
-If your project has dedicated documentation available for users, provide links here. For help in following Grafana's style recommendations for technical documentation, refer to our [Writer's Toolkit](https://grafana.com/docs/writers-toolkit/).
+![example.gif](example.gif)
 
 ## Contributing
-Do you want folks to contribute to the plugin or provide feedback through specific means? If so, tell them how!
--->
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+### Development Environment Setup
+
+1. Clone the repository
+2. Run `npm install` to install the dependencies
+3. Run `npm run build` to build the plugin
+4. Run `sudo docker compose up` to start the development environment
+5. Run `sudo npm run dev` to start the actual plugin simultaneously
+6. Open `http://localhost:3000` in your browser and login with the default credentials (admin:admin)
+7. Add a new dashboard and add the Solar Flow plugin to it
+8. Create a new data source and provide the queries for the solar panel production data. Or create a grafana test data source

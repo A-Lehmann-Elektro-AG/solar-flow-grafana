@@ -21,7 +21,6 @@ Our plugin has some options that can be adjusted to your needs:
 ### Solar/Grid Value:
 These two are the most important settings in the plugin. They define the fields from your data source that contain the solar
 panel production and grid energy data. The plugin will use these values to calculate the load energy and visualize the flow of energy.
-![img_1.png](img_1.png)
 After you provided an appropriate data source and query, you need to choose the Solar and Grid values from the dropdown list.
 
 ### Zoom
