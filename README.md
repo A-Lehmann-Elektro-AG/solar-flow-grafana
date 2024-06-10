@@ -21,7 +21,6 @@ Our plugin has some options that can be adjusted to your needs:
 ### Solar/Grid Value:
 These two are the most important settings in the plugin. They define the fields from your data source that contain the solar
 panel production and grid energy data. The plugin will use these values to calculate the load energy and visualize the flow of energy.
-![img_1.png](img_1.png)
 After you provided an appropriate data source and query, you need to choose the Solar and Grid values from the dropdown list.
 
 ### Zoom
@@ -35,7 +34,7 @@ Simply toggle to true if you want the load and grid energy points to be labeled 
 
 ### Color Palette
 You can define such colors as:
-- `Solar Color` - the color of the solar panel production flow
+- `Solar Color` - the color of the solargu panel production flow
 - `Grid Color` - the color of the grid energy flow
 - `Load Color` - the color of the load energy flow
 - `Lines Color` - the color of the lines connecting the points
