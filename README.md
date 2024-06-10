@@ -41,7 +41,7 @@ You can define such colors as:
 
 ## Final Result (example):
 
-![example.gif](example.gif)
+![example.gif](https://github.com/A-Lehmann-Elektro-AG/solar-flow-grafana/blob/main/example.gif?raw=true)
 
 ## Contributing
 
