@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "datasource",
+  "name": "E2E Test Datasource",
+  "id": "sampleorg-e2etest-datasource",
+  "metrics": true,
+  "backend": true,
+  "executable": "gpx_e2_e_test_datasource",
+  "info": {
+    "description": "This is a sample datasource",
+    "author": {
+      "name": "Sample org"
+    },
+    "keywords": ["datasource"],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=10.3.3",
+    "plugins": []
+  }
+}
