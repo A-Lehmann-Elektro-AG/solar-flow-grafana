@@ -4,7 +4,7 @@ export interface FlowData {
  pv: number;
  grid: number;
  load: number;
- battery?: number;
+ battery: number;
 }
 
 export interface CustomXarrowProps {

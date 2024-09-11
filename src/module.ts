@@ -62,7 +62,7 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       path: 'solarColor',
       name: 'Color palette',
       description: 'Solar Color',
-      defaultValue: 'rgb(244, 174,` 1)',
+      defaultValue: 'rgb(244, 174, 1)',
     })
     .addColorPicker({
       path: 'loadColor',
@@ -75,6 +75,12 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       name: '',
       description: 'Grid Color',
       defaultValue: 'rgb(232, 41, 26)',
+    })
+    .addColorPicker({
+      path: 'batteryColor',
+      name: '',
+      description: 'Battery Color',
+      defaultValue: 'rgb(81, 187, 67)',
     })
     .addColorPicker({
       path: 'linesColor',

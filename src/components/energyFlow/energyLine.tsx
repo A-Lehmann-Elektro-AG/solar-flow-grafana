@@ -7,18 +7,34 @@ interface EnergyLinesProps {
  pvPoint: PointPosition;
  loadPoint: PointPosition;
  gridPoint: PointPosition;
+ batteryPoint: PointPosition;
  linesColor: string;
 }
 
 
-export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoint, gridPoint, linesColor}) => {
+export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoint, gridPoint, batteryPoint, linesColor}) => {
   return (
     <>
-      {EmptyLines(pvPoint, loadPoint, gridPoint)}
+      <EmptyLine start={{x: pvPoint.x + 2, y: loadPoint.y}} end={gridPoint}/>
+      <EmptyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y - 2}}/>
+      <EmptyLine start={{x: pvPoint.x - 2, y: loadPoint.y}} end={loadPoint}/>
 
+      {flow.battery !== 0 && (
+        <>
+          <EmptyLine start={batteryPoint} end={{x: pvPoint.x, y: loadPoint.y + 2}}/>
+          <EnergyLine start={batteryPoint} end={{x: pvPoint.x, y: loadPoint.y }} linesColor={linesColor} className={flow.battery < 0 ? "animated-line" : "animated-line-reverse"}/>
+        </>)
+      }
+
+      {/*Grid line*/}
       <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint} linesColor={linesColor} className={flow.grid < 0 ? "animated-line" : "animated-line-reverse"}/>
+
+      {/*Solar line*/}
       <EnergyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y}} linesColor={linesColor} className="animated-line-reverse"/>
+
+      {/*Load line*/}
       <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={loadPoint} linesColor={linesColor} className="animated-line-reverse"/>
+
 
     </>
   );
@@ -52,14 +68,4 @@ const EmptyLine: React.FC<CustomXarrowProps> = ({start, end, className, linesCol
    className={className || ""}
   />
  );
-}
-
-const EmptyLines = (pvPoint: PointPosition, loadPoint: PointPosition, gridPoint: PointPosition) => {
- return (
-  <>
-   <EmptyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y}}/>
-   <EmptyLine start={{x: pvPoint.x, y: loadPoint.y}} end={loadPoint}/>
-   <EmptyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint}/>
-  </>
- )
 }

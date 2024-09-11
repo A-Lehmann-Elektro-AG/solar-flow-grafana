@@ -7,6 +7,7 @@ export interface SimpleOptions {
   valueFirst: boolean;
   showLegend: boolean;
   solarColor: string;
+  batteryColor: string;
   loadColor: string;
   gridColor: string;
   zoom: number;
@@ -14,4 +15,5 @@ export interface SimpleOptions {
   yOffset: number;
   solarQuery: any;
   gridQuery: any;
+  batteryLoadQuery: any;
 }
