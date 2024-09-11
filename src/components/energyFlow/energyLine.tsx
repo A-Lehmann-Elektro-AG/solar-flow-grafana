@@ -1,9 +1,9 @@
 import React from "react";
 import {PointPosition} from "./index";
-import {CustomXarrowProps, FlowType} from "../../models/flow";
+import { CustomXarrowProps, FlowData } from '../../models/flow';
 
 interface EnergyLinesProps {
- flow: FlowType;
+ flow: FlowData;
  pvPoint: PointPosition;
  loadPoint: PointPosition;
  gridPoint: PointPosition;
@@ -12,39 +12,16 @@ interface EnergyLinesProps {
 
 
 export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoint, gridPoint, linesColor}) => {
- switch (flow) {
-  case FlowType.overConsumption:
-   return (
+  return (
     <>
-     {EmptyLines(pvPoint, loadPoint, gridPoint)}
+      {EmptyLines(pvPoint, loadPoint, gridPoint)}
 
-     <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint} linesColor={linesColor} className="animated-line"/>
-     <EnergyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y}} linesColor={linesColor} className="animated-line-reverse"/>
-     <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={loadPoint} linesColor={linesColor} className="animated-line-reverse"/>
+      <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint} linesColor={linesColor} className={flow.grid < 0 ? "animated-line" : "animated-line-reverse"}/>
+      <EnergyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y}} linesColor={linesColor} className="animated-line-reverse"/>
+      <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={loadPoint} linesColor={linesColor} className="animated-line-reverse"/>
 
     </>
-   );
-  case FlowType.overProduction:
-   return (
-    <>
-     {EmptyLines(pvPoint, loadPoint, gridPoint)}
-
-     <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint} linesColor={linesColor} className="animated-line-reverse"/>
-     <EnergyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y}} linesColor={linesColor} className="animated-line-reverse"/>
-     <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={loadPoint} linesColor={linesColor} className="animated-line-reverse"/>
-    </>
-   );
-  case FlowType.noProduction:
-   return (
-    <>
-     {EmptyLines(pvPoint, loadPoint, gridPoint)}
-
-     <EnergyLine start={loadPoint} end={gridPoint} className="animated-line"/>
-    </>
-   );
-  default:
-   return null;
- }
+  );
 };
 
 

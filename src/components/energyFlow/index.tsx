@@ -73,7 +73,7 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
         {/*<h3 style={{position: 'absolute', top: '-450px', left: '170px', width: "200px"}}>Energy Flow</h3>*/}
         <div className="line-holder" style={{position: 'absolute', bottom: '500px', left: '0px'}}>
           <svg width="500" height="500" style={{position: 'absolute', top: '50px', left: '0'}} viewBox='0 0 500 500'>
-            <EnergyLines flow={flowData.flowType} pvPoint={pvPoint} linesColor={(theme.visualization.getColorByName(options.linesColor))} loadPoint={loadPoint} gridPoint={gridPoint}/>
+            <EnergyLines flow={flowData} pvPoint={pvPoint} linesColor={(theme.visualization.getColorByName(options.linesColor))} loadPoint={loadPoint} gridPoint={gridPoint}/>
           </svg>
         </div>
 
