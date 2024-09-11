@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import './index.css';
 import {customPoint, Point} from "./energyPoint";
-import {FlowData, FlowType} from "../../models/flow";
+import {FlowData} from "../../models/flow";
 import {EnergyFlowCore} from "../../services/energyFlowCore";
 import {EnergyLines} from "./energyLine";
 import {useTheme} from "@grafana/ui";
@@ -39,7 +39,6 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
   }
   //  implement battery load here
   const [flowData, setFlowData] = React.useState<FlowData>({
-    flowType: FlowType.overConsumption,
     pv: 0,
     load: 0,
     grid: 0,
