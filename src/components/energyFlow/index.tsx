@@ -37,6 +37,7 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
       }
     }
   }
+  //  implement battery load here
   const [flowData, setFlowData] = React.useState<FlowData>({
     flowType: FlowType.overConsumption,
     pv: 0,
@@ -46,10 +47,9 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
 
   useEffect(() => {
     (async () => {
-      setFlowData(await EnergyFlowCore.getNewFlowData(pv, grid));
+      setFlowData(await EnergyFlowCore.calculateNewFlowData(pv, grid));
     })();
   }, [grid, pv]);
-
 
   const pvPoint: PointPosition = {x: 275, y: 200};
   const loadPoint: PointPosition = {x: 100, y: 460};

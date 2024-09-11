@@ -11,6 +11,7 @@ export interface FlowData {
  pv: number;
  grid: number;
  load: number;
+ battery?: number;
  flowType: FlowType;
 }
 

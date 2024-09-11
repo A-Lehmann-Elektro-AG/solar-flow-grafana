@@ -16,6 +16,12 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       description: 'Select the field for the load data',
       defaultValue: '',
     })
+    .addFieldNamePicker({
+      path: "batteryLoadQuery",
+      name: 'Battery Load Value',
+      description: 'Select the field for the battery load data',
+      defaultValue: '',
+    })
     .addSliderInput(
       {
         path: 'zoom',
