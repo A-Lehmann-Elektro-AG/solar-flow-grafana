@@ -1,6 +1,6 @@
 {
   "name": "grafplugin-test",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Test grafana plugin",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
