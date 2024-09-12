@@ -74,12 +74,23 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
   }
 
   return (
-    <div style={{position: "absolute", left: `${(-175 + options.xOffset) * options.zoom}px`, top: `${(-8 - options.yOffset) * options.zoom}px`, transform: `scale(${options.zoom})`, transformOrigin: 'center'}}>
+    <div
+      style={{
+        position: "absolute",
+        left: `calc(${(-175 + options.xOffset)}px - 50%)`,
+        top: `calc(${(-8 - options.yOffset)}px - 50%)`,
+        transform: `scale(${options.zoom})`,
+        transformOrigin: "270px 0px",
+      }}
+    >
       <div>
         {/*<h3 style={{position: 'absolute', top: '-450px', left: '170px', width: "200px"}}>Energy Flow</h3>*/}
-        <div className="line-holder" style={{position: 'absolute', bottom: '500px', left: '0px'}}>
-          <svg width="500" height="1000" style={{position: 'absolute', top: '-200px', left: '0'}} viewBox='0 0 500 500'>
-            <EnergyLines flow={flowData} pvPoint={pvPoint} linesColor={(theme.visualization.getColorByName(options.linesColor))} loadPoint={loadPoint} gridPoint={gridPoint} batteryPoint={batteryPoint}/>
+        <div className="line-holder" style={{ position: 'absolute', bottom: '500px', left: '0px' }}>
+          <svg width="500" height="1000" style={{ position: 'absolute', top: '-200px', left: '0' }}
+               viewBox='0 0 500 500'>
+            <EnergyLines flow={flowData} pvPoint={pvPoint}
+                         linesColor={(theme.visualization.getColorByName(options.linesColor))} loadPoint={loadPoint}
+                         gridPoint={gridPoint} batteryPoint={batteryPoint} />
           </svg>
         </div>
 
