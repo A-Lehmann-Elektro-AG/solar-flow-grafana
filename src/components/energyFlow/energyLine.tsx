@@ -7,22 +7,22 @@ interface EnergyLinesProps {
  pvPoint: PointPosition;
  loadPoint: PointPosition;
  gridPoint: PointPosition;
- batteryPoint: PointPosition;
+ extraEnergyPoint: PointPosition;
  linesColor: string;
 }
 
 
-export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoint, gridPoint, batteryPoint, linesColor}) => {
+export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoint, gridPoint, extraEnergyPoint, linesColor}) => {
   return (
     <>
       <EmptyLine start={{x: pvPoint.x + 2, y: loadPoint.y}} end={gridPoint}/>
       <EmptyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y - 2}}/>
       <EmptyLine start={{x: pvPoint.x - 2, y: loadPoint.y}} end={loadPoint}/>
 
-      {flow.battery !== 0 && (
+      {flow.extraSource !== 0 && (
         <>
-          <EmptyLine start={batteryPoint} end={{x: pvPoint.x, y: loadPoint.y + 2}}/>
-          <EnergyLine start={batteryPoint} end={{x: pvPoint.x, y: loadPoint.y }} linesColor={linesColor} className={flow.battery < 0 ? "animated-line" : "animated-line-reverse"}/>
+          <EmptyLine start={extraEnergyPoint} end={{x: pvPoint.x, y: loadPoint.y + 2}}/>
+          <EnergyLine start={extraEnergyPoint} end={{x: pvPoint.x, y: loadPoint.y }} linesColor={linesColor} className={flow.extraSource < 0 ? "animated-line" : "animated-line-reverse"}/>
         </>)
       }
 

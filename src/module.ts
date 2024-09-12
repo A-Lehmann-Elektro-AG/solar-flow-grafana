@@ -17,10 +17,29 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       defaultValue: '',
     })
     .addFieldNamePicker({
-      path: "batteryLoadQuery",
-      name: 'Battery Load Value',
-      description: 'Select the field for the battery load data',
+      path: "additionalSourceLoadQuery",
+      name: 'Additional Source Value',
+      description: 'Select the field for the Additional source. You can display any additional data source here, for example your battery, EV Panel or any other source',
       defaultValue: '',
+    })
+    .addTextInput({
+      path: 'additionalSourceLabel',
+      name: 'Additional Source Label',
+      description: 'Label for the Additional source',
+      defaultValue: 'Battery',
+    })
+    .addSelect({
+      path: 'additionalSourceIcon',
+      name: 'Additional Source Icon',
+      description: 'Icon for the Additional source',
+      defaultValue: 'battery',
+      settings: {
+        options: [
+          { value: 'battery', label: 'Battery' },
+          { value: 'evPanel', label: 'EV Panel' },
+          { value: 'solarPanel', label: 'Solar Panel' },
+        ],
+      }
     })
     .addSliderInput(
       {
@@ -77,9 +96,9 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       defaultValue: 'rgb(232, 41, 26)',
     })
     .addColorPicker({
-      path: 'batteryColor',
+      path: 'additionalSourceColor',
       name: '',
-      description: 'Battery Color',
+      description: 'Additional Source Color',
       defaultValue: 'rgb(81, 187, 67)',
     })
     .addColorPicker({
