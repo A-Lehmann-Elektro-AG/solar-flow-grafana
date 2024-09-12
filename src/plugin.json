@@ -28,8 +28,8 @@
         "name": "Screenshot",
         "path": "img_6.png"
       }],
-    "version": "1.0.0",
-    "updated": "2024-03-15"
+    "version": "1.1.0",
+    "updated": "2024-09-12"
   },
   "dependencies": {
     "grafanaDependency": ">=10.3.3",

@@ -23,6 +23,9 @@ These two are the most important settings in the plugin. They define the fields 
 panel production and grid energy data. The plugin will use these values to calculate the load energy and visualize the flow of energy.
 After you provided an appropriate data source and query, you need to choose the Solar and Grid values from the dropdown list.
 
+### Additional Source Value:
+This setting allows you to add an additional energy source to the visualization. This can be useful if you have a battery or another energy source that you want to visualize. If you don't have an additional source, you can leave this field empty.
+
 ### Zoom
 This settings allows you to scale the visualization to your needs.
 
@@ -37,6 +40,7 @@ You can define such colors as:
 - `Solar Color` - the color of the solargu panel production flow
 - `Grid Color` - the color of the grid energy flow
 - `Load Color` - the color of the load energy flow
+- `Additional Source Color` - the color of the addition energy source
 - `Lines Color` - the color of the lines connecting the points
 
 ## Final Result (example):
