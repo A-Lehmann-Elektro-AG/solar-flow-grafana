@@ -29,6 +29,19 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       defaultValue: 'Battery',
     })
     .addSelect({
+      path: 'measurementUnit',
+      name: 'Select Measurement Unit',
+      description: '',
+      defaultValue: 'kW',
+      settings: {
+        options: [
+          { value: 'kW', label: 'kW' },
+          { value: 'W', label: 'W' },
+          { value: 'MW', label: 'MW' },
+        ],
+      }
+    })
+    .addSelect({
       path: 'additionalSourceIcon',
       name: 'Additional Source Icon',
       description: 'Icon for the Additional source',

@@ -51,9 +51,9 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
 
   useEffect(() => {
     (async () => {
-      setFlowData(await EnergyFlowCore.calculateNewFlowData(pv, grid, additionalSource));
+      setFlowData(await EnergyFlowCore.calculateNewFlowData(pv, grid, additionalSource, options.measurementUnit));
     })();
-  }, [grid, pv, additionalSource]);
+  }, [grid, pv, additionalSource, options.measurementUnit]);
 
   const pvPoint: PointPosition = {x: 275, y: 250};
   const loadPoint: PointPosition = {x: 100, y: 460};
@@ -100,19 +100,19 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
 
         <div className="line-holder" style={{ position: 'absolute', bottom: '0px', left: '25px' }}>
           <div className="point-holder" style={{ position: 'absolute', top: '-300px', left: '150px' }}>
-            <Point label="PV" showLegend={false} value={flowData.pv}
+            <Point label="PV" measurementUnit={options.measurementUnit} showLegend={false} value={flowData.pv}
                    style={customPoint(theme.visualization.getColorByName(options.solarColor))} icon={icons["solarPanel"]} />
           </div>
           {flowData.additionalSource !== 0 && (
             <div className="point-holder" style={{ position: 'absolute', top: '100px', left: '150px' }}>
-              <Point label={options.additionalSourceLabel} showLegend={options.showLegend} value={flowData.additionalSource}
+              <Point label={options.additionalSourceLabel} measurementUnit={options.measurementUnit} showLegend={options.showLegend} value={flowData.additionalSource}
                      style={customPoint(theme.visualization.getColorByName(options.batteryColor))} icon={icons[options.additionalSourceIcon]} />
             </div>
           )}
           <div className="point-holder" style={{ position: 'absolute', top: -110, left: '25px' }}>
-            <Point showLegend={options.showLegend} label="Load" value={flowData.load}
+            <Point showLegend={options.showLegend} measurementUnit={options.measurementUnit} label="Load" value={flowData.load}
                    style={customPoint(theme.visualization.getColorByName(options.loadColor))} icon={icons['load']} />
-            <Point showLegend={options.showLegend} label="Grid" value={flowData.grid}
+            <Point showLegend={options.showLegend} measurementUnit={options.measurementUnit} label="Grid" value={flowData.grid}
                    style={customPoint(theme.visualization.getColorByName(options.gridColor))} icon={icons['grid']} />
           </div>
         </div>
