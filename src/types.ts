@@ -1,5 +1,6 @@
 type SeriesSize = 'sm' | 'md' | 'lg';
 
+
 export interface SimpleOptions {
   text: string;
   showSeriesCount: boolean;
@@ -15,7 +16,7 @@ export interface SimpleOptions {
   yOffset: number;
   solarQuery: any;
   gridQuery: any;
-  extraSourceLoadQuery: any;
-  extraSourceLabel: string;
-  extraSourceIcon: string;
+  additionalSourceLoadQuery: any;
+  additionalSourceLabel: string;
+  additionalSourceIcon: string;
 }

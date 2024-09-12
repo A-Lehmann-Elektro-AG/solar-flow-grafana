@@ -4,7 +4,7 @@ export interface FlowData {
  pv: number;
  grid: number;
  load: number;
- extraSource: number;
+ additionalSource: number;
 }
 
 export interface CustomXarrowProps {
