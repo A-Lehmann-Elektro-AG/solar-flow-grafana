@@ -5,7 +5,7 @@ export class EnergyFlowCore {
     const data: FlowData = {
       pv: Number((pv / 1000).toFixed(2)),
       grid: Number((grid / 1000).toFixed(2)),
-      load: Number((pv + grid / 1000).toFixed(2)),
+      load: Number(((pv + grid + (battery !== 0 ? battery : 0)) / 1000).toFixed(2)),
       battery: Number((battery / 1000).toFixed(2)),
     };
 

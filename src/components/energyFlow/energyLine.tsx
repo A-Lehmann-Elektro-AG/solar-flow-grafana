@@ -27,7 +27,7 @@ export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoin
       }
 
       {/*Grid line*/}
-      <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint} linesColor={linesColor} className={flow.grid < 0 ? "animated-line" : "animated-line-reverse"}/>
+      <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint} linesColor={linesColor} className={flow.grid < 0 ? "animated-line-reverse" : "animated-line"}/>
 
       {/*Solar line*/}
       <EnergyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y}} linesColor={linesColor} className="animated-line-reverse"/>
