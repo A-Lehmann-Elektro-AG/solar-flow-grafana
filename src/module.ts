@@ -16,6 +16,31 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       description: 'Select the field for the load data',
       defaultValue: '',
     })
+    .addFieldNamePicker({
+      path: "additionalSourceLoadQuery",
+      name: 'Additional Source Value',
+      description: 'Select the field for the Additional source (Battery, EV Panel, etc.)',
+      defaultValue: '',
+    })
+    .addTextInput({
+      path: 'additionalSourceLabel',
+      name: 'Additional Source Label',
+      description: 'Label for the Additional source',
+      defaultValue: 'Battery',
+    })
+    .addSelect({
+      path: 'additionalSourceIcon',
+      name: 'Additional Source Icon',
+      description: 'Icon for the Additional source',
+      defaultValue: 'battery',
+      settings: {
+        options: [
+          { value: 'battery', label: 'Battery' },
+          { value: 'evPanel', label: 'EV Panel' },
+          { value: 'solarPanel', label: 'Solar Panel' },
+        ],
+      }
+    })
     .addSliderInput(
       {
         path: 'zoom',
@@ -56,7 +81,7 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       path: 'solarColor',
       name: 'Color palette',
       description: 'Solar Color',
-      defaultValue: 'rgb(244, 174,` 1)',
+      defaultValue: 'rgb(244, 174, 1)',
     })
     .addColorPicker({
       path: 'loadColor',
@@ -69,6 +94,12 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       name: '',
       description: 'Grid Color',
       defaultValue: 'rgb(232, 41, 26)',
+    })
+    .addColorPicker({
+      path: 'additionalSourceColor',
+      name: '',
+      description: 'Additional Source Color',
+      defaultValue: 'rgb(81, 187, 67)',
     })
     .addColorPicker({
       path: 'linesColor',

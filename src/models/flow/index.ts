@@ -1,17 +1,10 @@
 import {PointPosition} from "../../components/energyFlow";
 
-export enum FlowType {
- overProduction = "overProduction",
- noProduction = "noProduction",
- overConsumption = "overConsumption",
- undefined = "undefined"
-}
-
 export interface FlowData {
  pv: number;
  grid: number;
  load: number;
- flowType: FlowType;
+ additionalSource: number;
 }
 
 export interface CustomXarrowProps {

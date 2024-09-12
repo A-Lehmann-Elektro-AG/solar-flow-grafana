@@ -61,7 +61,7 @@ function legendComponent(fontColor: string, label: string) {
   const fill = props.style.stroke;
   return (
     <div className="point">
-      <svg height="200" width="200">
+      <svg height="250" width="250">
         <circle cx="100" cy="100" r={outerRadius} strokeWidth="0.5" fill="transparent" style={props.style}/>
         <circle className="z-5" cx="100" cy="100" r={baseRadius} style={props.style} strokeWidth="1.5"
                 fill={...fill}/>

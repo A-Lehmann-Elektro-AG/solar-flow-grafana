@@ -1,50 +1,43 @@
 import React from "react";
 import {PointPosition} from "./index";
-import {CustomXarrowProps, FlowType} from "../../models/flow";
+import { CustomXarrowProps, FlowData } from '../../models/flow';
 
 interface EnergyLinesProps {
- flow: FlowType;
+ flow: FlowData;
  pvPoint: PointPosition;
  loadPoint: PointPosition;
  gridPoint: PointPosition;
+ extraEnergyPoint: PointPosition;
  linesColor: string;
 }
 
 
-export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoint, gridPoint, linesColor}) => {
- switch (flow) {
-  case FlowType.overConsumption:
-   return (
+export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoint, gridPoint, extraEnergyPoint, linesColor}) => {
+  return (
     <>
-     {EmptyLines(pvPoint, loadPoint, gridPoint)}
+      <EmptyLine start={{x: pvPoint.x + 2, y: loadPoint.y}} end={gridPoint}/>
+      <EmptyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y - 2}}/>
+      <EmptyLine start={{x: pvPoint.x - 2, y: loadPoint.y}} end={loadPoint}/>
 
-     <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint} linesColor={linesColor} className="animated-line"/>
-     <EnergyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y}} linesColor={linesColor} className="animated-line-reverse"/>
-     <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={loadPoint} linesColor={linesColor} className="animated-line-reverse"/>
+      {flow.additionalSource !== 0 && (
+        <>
+          <EmptyLine start={extraEnergyPoint} end={{x: pvPoint.x, y: loadPoint.y + 2}}/>
+          <EnergyLine start={extraEnergyPoint} end={{x: pvPoint.x, y: loadPoint.y }} linesColor={linesColor} className={flow.additionalSource < 0 ? "animated-line" : "animated-line-reverse"}/>
+        </>)
+      }
+
+      {/*Grid line*/}
+      <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint} linesColor={linesColor} className={flow.grid < 0 ? "animated-line-reverse" : "animated-line"}/>
+
+      {/*Solar line*/}
+      <EnergyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y}} linesColor={linesColor} className="animated-line-reverse"/>
+
+      {/*Load line*/}
+      <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={loadPoint} linesColor={linesColor} className="animated-line-reverse"/>
+
 
     </>
-   );
-  case FlowType.overProduction:
-   return (
-    <>
-     {EmptyLines(pvPoint, loadPoint, gridPoint)}
-
-     <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint} linesColor={linesColor} className="animated-line-reverse"/>
-     <EnergyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y}} linesColor={linesColor} className="animated-line-reverse"/>
-     <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={loadPoint} linesColor={linesColor} className="animated-line-reverse"/>
-    </>
-   );
-  case FlowType.noProduction:
-   return (
-    <>
-     {EmptyLines(pvPoint, loadPoint, gridPoint)}
-
-     <EnergyLine start={loadPoint} end={gridPoint} className="animated-line"/>
-    </>
-   );
-  default:
-   return null;
- }
+  );
 };
 
 
@@ -75,14 +68,4 @@ const EmptyLine: React.FC<CustomXarrowProps> = ({start, end, className, linesCol
    className={className || ""}
   />
  );
-}
-
-const EmptyLines = (pvPoint: PointPosition, loadPoint: PointPosition, gridPoint: PointPosition) => {
- return (
-  <>
-   <EmptyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y}}/>
-   <EmptyLine start={{x: pvPoint.x, y: loadPoint.y}} end={loadPoint}/>
-   <EmptyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint}/>
-  </>
- )
 }
