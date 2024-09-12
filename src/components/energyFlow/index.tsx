@@ -36,7 +36,7 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
       }
     }
     for(let fieldIndex = 0; fieldIndex < data.series[seriesIndex].fields.length; fieldIndex++) {
-      if (data.series[seriesIndex].fields[fieldIndex].name === options.extraSourceLoadQuery) {
+      if (data.series[seriesIndex].fields[fieldIndex].name === options.additionalSourceLoadQuery) {
         additionalSource = data.series[seriesIndex].fields[fieldIndex].values[0];
       }
     }
@@ -81,8 +81,8 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
     <div
       style={{
         position: "absolute",
-        left: `calc(${(-175 + options.xOffset)}px - 50%)`,
-        top: `calc(${(-8 - options.yOffset)}px - 50%)`,
+        left: `calc(${(-165 + options.xOffset)}px - 50%)`,
+        top: `calc(${(0 - options.yOffset)}px - 50%)`,
         transform: `scale(${options.zoom})`,
         transformOrigin: "270px 0px",
       }}
