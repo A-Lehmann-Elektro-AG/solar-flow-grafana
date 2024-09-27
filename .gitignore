@@ -41,3 +41,9 @@ e2e-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+<<<<<<< Updated upstream
+/lehmannch-flow-panel/
+=======
+lehmannch-flow-panel/
+>>>>>>> Stashed changes

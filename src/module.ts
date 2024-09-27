@@ -19,7 +19,7 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
     .addFieldNamePicker({
       path: "additionalSourceLoadQuery",
       name: 'Additional Source Value',
-      description: 'Select the field for the Additional source (Battery, EV Panel, etc.)',
+      description: 'Select the field for the Additional source (Battery, EV Panel, etc.) - Deselect to remove',
       defaultValue: '',
     })
     .addTextInput({

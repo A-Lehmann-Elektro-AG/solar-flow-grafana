@@ -19,5 +19,6 @@ export interface SimpleOptions {
   additionalSourceLoadQuery: any;
   additionalSourceLabel: string;
   additionalSourceIcon: string;
+  additionalSourceColor: string;
   measurementUnit: 'W' | 'kW' | 'MW';
 }

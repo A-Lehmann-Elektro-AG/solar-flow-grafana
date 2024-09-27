@@ -106,7 +106,7 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
           {flowData.additionalSource !== 0 && (
             <div className="point-holder" style={{ position: 'absolute', top: '100px', left: '150px' }}>
               <Point label={options.additionalSourceLabel} measurementUnit={options.measurementUnit} showLegend={options.showLegend} value={flowData.additionalSource}
-                     style={customPoint(theme.visualization.getColorByName(options.batteryColor))} icon={icons[options.additionalSourceIcon]} />
+                     style={customPoint(theme.visualization.getColorByName(options.additionalSourceColor))} icon={icons[options.additionalSourceIcon]} />
             </div>
           )}
           <div className="point-holder" style={{ position: 'absolute', top: -110, left: '25px' }}>
