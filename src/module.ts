@@ -37,7 +37,7 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
         options: [
           { value: 'kW', label: 'kW' },
           { value: 'W', label: 'W' },
-          { value: 'MW', label: 'MW' },
+          // { value: 'MW', label: 'MW' },
         ],
       }
     })
