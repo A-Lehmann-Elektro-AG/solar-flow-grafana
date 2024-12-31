@@ -22,6 +22,7 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
   let grid = 0;
   let pv = 0;
   let additionalSource = 0;
+  let additionalSourceSOC = 0;
 
   // Look for matching data in the series
   for(let seriesIndex = 0; seriesIndex < data.series.length; seriesIndex++) {
@@ -40,6 +41,11 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
         additionalSource = data.series[seriesIndex].fields[fieldIndex].values[0];
       }
     }
+    for(let fieldIndex = 0; fieldIndex < data.series[seriesIndex].fields.length; fieldIndex++) {
+      if (data.series[seriesIndex].fields[fieldIndex].name === options.additionalSourceSOCQuery) {
+        additionalSourceSOC = data.series[seriesIndex].fields[fieldIndex].values[0];
+      }
+    }
   }
 
   const [flowData, setFlowData] = React.useState<FlowData>({
@@ -47,13 +53,14 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
     load: 0,
     grid: 0,
     additionalSource: 0,
+    additionalSourceSOC: 0,
   });
 
   useEffect(() => {
     (async () => {
-      setFlowData(await EnergyFlowCore.calculateNewFlowData(pv, grid, additionalSource, options.measurementUnit));
+      setFlowData(await EnergyFlowCore.calculateNewFlowData(pv, grid, additionalSource, additionalSourceSOC, options.measurementUnit));
     })();
-  }, [grid, pv, additionalSource, options.measurementUnit]);
+  }, [grid, pv, additionalSource, additionalSourceSOC, options.measurementUnit]);
 
   const pvPoint: PointPosition = {x: 275, y: 250};
   const loadPoint: PointPosition = {x: 100, y: 460};
@@ -103,9 +110,10 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
             <Point label="PV" measurementUnit={options.measurementUnit} showLegend={false} value={flowData.pv}
                    style={customPoint(theme.visualization.getColorByName(options.solarColor))} icon={icons["solarPanel"]} />
           </div>
-          {flowData.additionalSource !== 0 && (
+          {(flowData.additionalSource !== 0 || flowData.additionalSourceSOC !== 0) && (
             <div className="point-holder" style={{ position: 'absolute', top: '100px', left: '150px' }}>
               <Point label={options.additionalSourceLabel} measurementUnit={options.measurementUnit} showLegend={options.showLegend} value={flowData.additionalSource}
+                     subValue={flowData.additionalSourceSOC}
                      style={customPoint(theme.visualization.getColorByName(options.additionalSourceColor))} icon={icons[options.additionalSourceIcon]} />
             </div>
           )}

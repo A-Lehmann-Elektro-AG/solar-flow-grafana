@@ -4,6 +4,7 @@ import {useTheme2} from "@grafana/ui";
 interface PointProps {
   label: string;
   value: number;
+  subValue?: number;
   style: any;
   icon: string;
   showLegend?: any;
@@ -59,6 +60,10 @@ function legendComponent(fontColor: string, label: string) {
           <path
             d={props.icon}/>
         </svg>
+        { props.subValue && (
+              <text fontSize={12} fill={fontColor} x="100" y="148"
+                  textAnchor="middle">{props.subValue + "%"}</text>
+	)}
         <br/>
       </svg>
       {/*<text className={"m"}>{props.label}</text>*/}
