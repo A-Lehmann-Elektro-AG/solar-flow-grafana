@@ -125,5 +125,11 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       name: 'Show legend',
       description: 'Label the energy points',
       defaultValue: false,
+    })
+    .addBooleanSwitch({
+      path: 'additionalSourceAlwaysShow',
+      name: 'Always show additional source',
+      description: 'Always show the additional source, even if input is 0',
+      defaultValue: false,
     });
 });
