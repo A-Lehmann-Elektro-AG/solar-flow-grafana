@@ -28,6 +28,12 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       description: 'Label for the Additional source',
       defaultValue: 'Battery',
     })
+    .addBooleanSwitch({
+      path: 'additionalSourceAlwaysShow',
+      name: 'Always show additional source',
+      description: 'Always show the additional source, even if input is 0',
+      defaultValue: false,
+    })
     .addSelect({
       path: 'measurementUnit',
       name: 'Select Measurement Unit',
@@ -124,12 +130,6 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       path: 'showLegend',
       name: 'Show legend',
       description: 'Label the energy points',
-      defaultValue: false,
-    })
-    .addBooleanSwitch({
-      path: 'additionalSourceAlwaysShow',
-      name: 'Always show additional source',
-      description: 'Always show the additional source, even if input is 0',
       defaultValue: false,
     });
 });

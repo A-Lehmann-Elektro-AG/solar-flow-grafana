@@ -94,7 +94,7 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
                viewBox='0 0 500 500'>
             <EnergyLines flow={flowData} pvPoint={pvPoint}
                          linesColor={(theme.visualization.getColorByName(options.linesColor))} loadPoint={loadPoint}
-                         gridPoint={gridPoint} extraEnergyPoint={additionalPoint} />
+                         gridPoint={gridPoint} extraEnergyPoint={additionalPoint} alwaysShowAdditionalSource={options.additionalSourceAlwaysShow}/>
           </svg>
         </div>
 
