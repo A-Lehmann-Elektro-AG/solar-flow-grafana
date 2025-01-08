@@ -85,6 +85,7 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
         top: `calc(${(0 - options.yOffset)}px - 50%)`,
         transform: `scale(${options.zoom})`,
         transformOrigin: "270px 0px",
+        pointerEvents: "none",
       }}
     >
       <div>
