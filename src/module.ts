@@ -22,6 +22,12 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       description: 'Select the field for the Additional source (Battery, EV Panel, etc.) - Deselect to remove',
       defaultValue: '',
     })
+    .addFieldNamePicker({
+      path: "additionalSourceSOCQuery",
+      name: 'Additional Source SOC Value',
+      description: 'Select the field for the Additional sources SOC (Battery, EV Panel, etc.) - Deselect to remove',
+      defaultValue: '',
+    })
     .addTextInput({
       path: 'additionalSourceLabel',
       name: 'Additional Source Label',
@@ -60,6 +66,13 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
         ],
       }
     })
+    .addNumberInput({
+        path: 'showEnergyThreshold',
+        name: 'Energy line threshold',
+        description: 'Threshold for showing energy lines',
+        defaultValue: 0,
+      }
+    )
     .addSliderInput(
       {
         path: 'zoom',

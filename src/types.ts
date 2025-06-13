@@ -11,12 +11,14 @@ export interface SimpleOptions {
   extraSourceColor: string;
   loadColor: string;
   gridColor: string;
+  showEnergyThreshold: number;
   zoom: number;
   xOffset: number;
   yOffset: number;
   solarQuery: any;
   gridQuery: any;
   additionalSourceLoadQuery: any;
+  additionalSourceSOCQuery: any;
   additionalSourceLabel: string;
   additionalSourceIcon: string;
   additionalSourceColor: string;

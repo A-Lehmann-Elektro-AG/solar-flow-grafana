@@ -5,6 +5,7 @@ export interface FlowData {
  grid: number;
  load: number;
  additionalSource: number;
+ additionalSourceSOC: number;
 }
 
 export interface CustomXarrowProps {
