@@ -11,6 +11,7 @@ export interface SimpleOptions {
   extraSourceColor: string;
   loadColor: string;
   gridColor: string;
+  showEnergyThreshold: number;
   zoom: number;
   xOffset: number;
   yOffset: number;

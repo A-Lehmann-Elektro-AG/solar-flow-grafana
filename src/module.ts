@@ -60,6 +60,13 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
         ],
       }
     })
+    .addNumberInput({
+        path: 'showEnergyThreshold',
+        name: 'Energy line threshold',
+        description: 'Threshold for showing energy lines',
+        defaultValue: 0,
+      }
+    )
     .addSliderInput(
       {
         path: 'zoom',
