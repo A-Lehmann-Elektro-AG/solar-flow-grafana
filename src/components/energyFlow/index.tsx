@@ -102,7 +102,7 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
                viewBox='0 0 500 500'>
             <EnergyLines flow={flowData} pvPoint={pvPoint}
                          linesColor={(theme.visualization.getColorByName(options.linesColor))} loadPoint={loadPoint}
-                         gridPoint={gridPoint} extraEnergyPoint={additionalPoint} showEnergyThreshold={options.showEnergyThreshold}/>
+                         gridPoint={gridPoint} extraEnergyPoint={additionalPoint} showEnergyThreshold={options.showEnergyThreshold alwaysShowAdditionalSource={options.additionalSourceAlwaysShow}/>
           </svg>
         </div>
 
@@ -111,7 +111,7 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
             <Point label="PV" measurementUnit={options.measurementUnit} showLegend={false} value={flowData.pv}
                    style={customPoint(theme.visualization.getColorByName(options.solarColor))} icon={icons["solarPanel"]} />
           </div>
-          {Math.abs(flowData.additionalSource) > options.showEnergyThreshold && (
+          {(Math.abs(flowData.additionalSource) > options.showEnergyThreshold) || options.additionalSourceAlwaysShow && (
             <div className="point-holder" style={{ position: 'absolute', top: '100px', left: '150px' }}>
               <Point label={options.additionalSourceLabel} measurementUnit={options.measurementUnit} showLegend={options.showLegend} value={flowData.additionalSource}
                      subValue={flowData.additionalSourceSOC}

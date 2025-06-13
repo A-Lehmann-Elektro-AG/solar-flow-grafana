@@ -9,18 +9,19 @@ interface EnergyLinesProps {
  gridPoint: PointPosition;
  extraEnergyPoint: PointPosition;
  linesColor: string;
+ alwaysShowAdditionalSource: boolean;
  showEnergyThreshold: number;
 }
 
 
-export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoint, gridPoint, extraEnergyPoint, linesColor, showEnergyThreshold}) => {
+export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoint, gridPoint, extraEnergyPoint, linesColor, showEnergyThreshold, alwaysShowAdditionalSource}) => {
   return (
     <>
       <EmptyLine start={{x: pvPoint.x + 2, y: loadPoint.y}} end={gridPoint}/>
       <EmptyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y - 2}}/>
       <EmptyLine start={{x: pvPoint.x - 2, y: loadPoint.y}} end={loadPoint}/>
 
-      { Math.abs(flow.additionalSource) > showEnergyThreshold && (
+      {(Math.abs(flow.additionalSource) > showEnergyThreshold) || alwaysShowAdditionalSource && (
         <>
           <EmptyLine start={extraEnergyPoint} end={{x: pvPoint.x, y: loadPoint.y + 2}}/>
           { Math.abs(flow.additionalSource) > showEnergyThreshold && (

@@ -22,5 +22,6 @@ export interface SimpleOptions {
   additionalSourceLabel: string;
   additionalSourceIcon: string;
   additionalSourceColor: string;
+  additionalSourceAlwaysShow: boolean;
   measurementUnit: 'W' | 'kW' | 'MW';
 }
