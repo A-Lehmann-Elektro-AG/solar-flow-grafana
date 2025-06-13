@@ -18,6 +18,7 @@ export interface SimpleOptions {
   solarQuery: any;
   gridQuery: any;
   additionalSourceLoadQuery: any;
+  additionalSourceSOCQuery: any;
   additionalSourceLabel: string;
   additionalSourceIcon: string;
   additionalSourceColor: string;
