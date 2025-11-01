@@ -21,7 +21,7 @@ export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoin
       <EmptyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y - 2}}/>
       <EmptyLine start={{x: pvPoint.x - 2, y: loadPoint.y}} end={loadPoint}/>
 
-      {(Math.abs(flow.additionalSource) > showEnergyThreshold) || alwaysShowAdditionalSource && (
+      {((Math.abs(flow.additionalSource) > showEnergyThreshold) || alwaysShowAdditionalSource) && (
         <>
           <EmptyLine start={extraEnergyPoint} end={{x: pvPoint.x, y: loadPoint.y + 2}}/>
           { Math.abs(flow.additionalSource) > showEnergyThreshold && (
