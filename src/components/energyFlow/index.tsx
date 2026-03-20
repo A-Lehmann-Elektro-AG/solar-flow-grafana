@@ -1,10 +1,12 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import './index.css';
-import {customPoint, Point} from "./energyPoint";
-import {FlowData} from "../../models/flow";
-import {EnergyFlowCore} from "../../services/energyFlowCore";
-import {EnergyLines} from "./energyLine";
-import {useTheme} from "@grafana/ui";
+import { customPoint, Point } from './energyPoint';
+import { FlowData, MeasurementUnit, UNIT_TO_WATTS } from '../../models/flow';
+import { EnergyFlowCore, RawAdditionalSource } from '../../services/energyFlowCore';
+import { EnergyLines, AdditionalSourceLineData } from './energyLine';
+import { useTheme2 } from '@grafana/ui';
+import { SimpleOptions } from '../../types';
+import { ICON_PATHS } from '../../constants/icons';
 
 export interface PointPosition {
   x: number;
@@ -12,120 +14,276 @@ export interface PointPosition {
 }
 
 export interface EnergyFlowProps {
-  data: any,
-  options: any
+  data: any;
+  options: SimpleOptions;
+  width: number;
+  height: number;
 }
 
-export const EnergyFlow: React.FC<EnergyFlowProps> = ({data, options}) => {
-  const theme = useTheme();
-
-  let grid = 0;
-  let pv = 0;
-  let additionalSource = 0;
-  let additionalSourceSOC = 0;
-
-  // Look for matching data in the series
-  for(let seriesIndex = 0; seriesIndex < data.series.length; seriesIndex++) {
-    for(let fieldIndex = 0; fieldIndex < data.series[seriesIndex].fields.length; fieldIndex++) {
-      if (data.series[seriesIndex].fields[fieldIndex].name === options.solarQuery) {
-        pv = data.series[seriesIndex].fields[fieldIndex].values[0];
-      }
-    }
-    for(let fieldIndex = 0; fieldIndex < data.series[seriesIndex].fields.length; fieldIndex++) {
-      if (data.series[seriesIndex].fields[fieldIndex].name === options.gridQuery) {
-        grid = data.series[seriesIndex].fields[fieldIndex].values[0];
-      }
-    }
-    for(let fieldIndex = 0; fieldIndex < data.series[seriesIndex].fields.length; fieldIndex++) {
-      if (data.series[seriesIndex].fields[fieldIndex].name === options.additionalSourceLoadQuery) {
-        additionalSource = data.series[seriesIndex].fields[fieldIndex].values[0];
-      }
-    }
-    for(let fieldIndex = 0; fieldIndex < data.series[seriesIndex].fields.length; fieldIndex++) {
-      if (data.series[seriesIndex].fields[fieldIndex].name === options.additionalSourceSOCQuery) {
-        additionalSourceSOC = data.series[seriesIndex].fields[fieldIndex].values[0];
-      }
+const extractFieldValue = (series: any[], fieldName: string): number => {
+  for (const s of series) {
+    const field = s.fields.find((f: any) => f.name === fieldName);
+    if (field) {
+      return field.values[0];
     }
   }
+  return 0;
+};
+
+// ── Layout constants ──────────────────────────────────────
+const PV_CENTER: PointPosition = { x: 275, y: 90 };
+const LOAD_CENTER: PointPosition = { x: 75, y: 310 };
+const GRID_CENTER: PointPosition = { x: 475, y: 310 };
+
+const PV_LINE_END: PointPosition = { x: 275, y: 145 };
+const LOAD_LINE_END: PointPosition = { x: 75, y: 310 };
+const GRID_LINE_END: PointPosition = { x: 475, y: 310 };
+
+const MAIN_HUB: PointPosition = { x: 275, y: 310 };
+
+// Additional source vertical positions
+const ADDITIONAL_Y = 520;
+const SUB_JUNCTION_Y = 425;
+
+// Bounding box without additional sources
+const BASE_BOUNDS = { minX: -30, minY: -15, maxX: 580, maxY: 420 };
+const EXTENDED_MAX_Y = 640;
+
+/** Compute center positions for additional source circles based on count. */
+function getAdditionalCenters(count: number): PointPosition[] {
+  switch (count) {
+    case 1: return [{ x: 275, y: ADDITIONAL_Y }];
+    case 2: return [{ x: 175, y: ADDITIONAL_Y }, { x: 375, y: ADDITIONAL_Y }];
+    case 3: return [{ x: 75, y: ADDITIONAL_Y }, { x: 275, y: ADDITIONAL_Y }, { x: 475, y: ADDITIONAL_Y }];
+    default: return [];
+  }
+}
+
+function getEnergyDirection(value: number): 'incoming' | 'outgoing' | 'none' {
+  if (value > 0) { return 'outgoing'; }
+  if (value < 0) { return 'incoming'; }
+  return 'none';
+}
+
+function getAnimDuration(energy: number, unit: MeasurementUnit, speedRef: number): string {
+  const energyInW = Math.abs(energy) * UNIT_TO_WATTS[unit];
+  const duration = Math.max(0.3, Math.min(2.5, speedRef / Math.max(energyInW, 0.001)));
+  return `${duration.toFixed(2)}s`;
+}
+
+// Per-source config extracted from flat options
+interface SourceConfig {
+  query: any;
+  socQuery: any;
+  label: string;
+  icon: string;
+  colorKey: keyof SimpleOptions;
+  alwaysShow: boolean;
+}
+
+function getSourceConfigs(options: SimpleOptions): SourceConfig[] {
+  const count = options.additionalSourceCount ?? 0;
+  const configs: SourceConfig[] = [];
+  if (count >= 1) {
+    configs.push({
+      query: options.additionalSourceLoadQuery,
+      socQuery: options.additionalSourceSOCQuery,
+      label: options.additionalSourceLabel ?? 'Battery',
+      icon: options.additionalSourceIcon ?? 'battery',
+      colorKey: 'additionalSourceColor',
+      alwaysShow: options.additionalSourceAlwaysShow ?? false,
+    });
+  }
+  if (count >= 2) {
+    configs.push({
+      query: options.additionalSource2LoadQuery,
+      socQuery: options.additionalSource2SOCQuery,
+      label: options.additionalSource2Label ?? 'Wallbox',
+      icon: options.additionalSource2Icon ?? 'evPanel',
+      colorKey: 'additionalSource2Color',
+      alwaysShow: options.additionalSource2AlwaysShow ?? false,
+    });
+  }
+  if (count >= 3) {
+    configs.push({
+      query: options.additionalSource3LoadQuery,
+      socQuery: options.additionalSource3SOCQuery,
+      label: options.additionalSource3Label ?? 'Wallbox 2',
+      icon: options.additionalSource3Icon ?? 'evPanel',
+      colorKey: 'additionalSource3Color',
+      alwaysShow: options.additionalSource3AlwaysShow ?? false,
+    });
+  }
+  return configs;
+}
+
+export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options, width, height }) => {
+  const theme = useTheme2();
+
+  const pv = extractFieldValue(data.series, options.solarQuery);
+  const grid = extractFieldValue(data.series, options.gridQuery);
+  const measuredLoad = options.loadQuery ? extractFieldValue(data.series, options.loadQuery) : undefined;
+
+  const sourceConfigs = getSourceConfigs(options);
+  const rawSources: RawAdditionalSource[] = sourceConfigs.map(cfg => ({
+    value: cfg.query ? extractFieldValue(data.series, cfg.query) : 0,
+    soc: cfg.socQuery ? extractFieldValue(data.series, cfg.socQuery) : 0,
+  }));
 
   const [flowData, setFlowData] = React.useState<FlowData>({
-    pv: 0,
-    load: 0,
-    grid: 0,
-    additionalSource: 0,
-    additionalSourceSOC: 0,
+    pv: 0, load: 0, grid: 0, additionalSources: [],
   });
 
   useEffect(() => {
-    (async () => {
-      setFlowData(await EnergyFlowCore.calculateNewFlowData(pv, grid, additionalSource, additionalSourceSOC, options.measurementUnit));
-    })();
-  }, [grid, pv, additionalSource, additionalSourceSOC, options.measurementUnit]);
+    setFlowData(EnergyFlowCore.calculateFlowData(pv, grid, rawSources, options.measurementUnit, measuredLoad));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pv, grid, measuredLoad, JSON.stringify(rawSources), options.measurementUnit]);
 
-  const pvPoint: PointPosition = {x: 275, y: 250};
-  const loadPoint: PointPosition = {x: 100, y: 460};
-  const gridPoint: PointPosition = {x: 450, y: 460};
-  const additionalPoint: PointPosition = {x: 275, y: 650};
-
-  const icons: { [key: string]: string } = {
-    grid: `M360-480q17 0 28.5-11.5T400-520v-120q0-17-11.5-28.5T360-680q-17 0-28.5 11.5T320-640v120q0 17 11.5 28.5T360-480Zm40 240h160v-80q0-33-23.5-56.5T480-400q-33 0-56.5 23.5T400-320v80Zm200-240q17 0 28.5-11.5T640-520v-120q0-17-11.5-28.5T600-680q-17 0-28.5 11.5T560-640v120q0 17 11.5 28.5T600-480ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z`,
-    solarPanel: `M133.847-800v-59.999h114.231V-800H133.847Zm-29.614 699.229h345.768v-149.23H133.925l-29.692 149.23Zm138.459-488.152-42.768-41.768 80.769-80.769 42.768 41.768-80.769 80.769Zm-96.614 278.924h303.923v-150.384H176.155l-30.077 150.384ZM480-679.615q-75.307 0-128.037-52.731-52.731-52.73-52.731-128.037h361.536q0 75.307-52.731 128.037-52.73 52.731-128.037 52.731Zm-29.999 163.461v-114.23h59.998v114.23h-59.998Zm59.998 415.383h345.384l-29.692-149.23H509.999v149.23Zm0-209.228h303.538L783.46-460.383H509.999v150.384Zm208.078-278.54-80.538-81.153 41.768-41.768 81.538 80.153-42.768 42.768ZM711.922-800v-59.999h114.231V-800H711.922Z`,
-    load: `M720-360v-80h80q17 0 28.5 11.5T840-400q0 17-11.5 28.5T800-360h-80Zm0 160v-80h80q17 0 28.5 11.5T840-240q0 17-11.5 28.5T800-200h-80Zm-160 40q-33 0-56.5-23.5T480-240h-80v-160h80q0-33 23.5-56.5T560-480h120v320H560ZM280-280q-66 0-113-47t-47-113q0-66 47-113t113-47h60q25 0 42.5-17.5T400-660q0-25-17.5-42.5T340-720H200q-17 0-28.5-11.5T160-760q0-17 11.5-28.5T200-800h140q58 0 99 41t41 99q0 58-41 99t-99 41h-60q-33 0-56.5 23.5T200-440q0 33 23.5 56.5T280-360h80v80h-80Z`,
-    battery: `M320-80q-17 0-28.5-11.5T280-120v-640q0-17 11.5-28.5T320-800h80v-80h160v80h80q17 0 28.5 11.5T680-760v640q0 17-11.5 28.5T640-80H320Z`,
-    evPanel: `m340-200 100-160h-60v-120L280-320h60v120ZM240-560h240v-200H240v200Zm0 360h240v-280H240v280Zm-80 80v-640q0-33 23.5-56.5T240-840h240q33 0 56.5 23.5T560-760v280h50q29 0 49.5 20.5T680-410v185q0 17 14 31t31 14q18 0 31.5-14t13.5-31v-375h-10q-17 0-28.5-11.5T720-640v-80h20v-60h40v60h40v-60h40v60h20v80q0 17-11.5 28.5T840-600h-10v375q0 42-30.5 73.5T725-120q-43 0-74-31.5T620-225v-185q0-5-2.5-7.5T610-420h-50v300H160Zm320-80H240h240Z`
-  };
-
-  if(data.series.length < 1) {
+  if (data.series.length < 1) {
     return (
-      <div style={{backgroundColor: "red", padding: "5%", borderRadius: "5px", width: "200px", textAlign: "center"}}>
+      <div style={{ backgroundColor: 'red', padding: '5%', borderRadius: '5px', width: '200px', textAlign: 'center' }}>
         <h3>Invalid/Missing data in one of the queries</h3>
       </div>
     );
   }
 
-  // @ts-ignore
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: `calc(${(-165 + options.xOffset)}px - 50%)`,
-        top: `calc(${(0 - options.yOffset)}px - 50%)`,
-        transform: `scale(${options.zoom})`,
-        transformOrigin: "270px 0px",
-        pointerEvents: "none",
-      }}
-    >
-      <div>
-        {/*<h3 style={{position: 'absolute', top: '-450px', left: '170px', width: "200px"}}>Energy Flow</h3>*/}
-        <div className="line-holder" style={{ position: 'absolute', bottom: '500px', left: '0px' }}>
-          <svg width="500" height="1000" style={{ position: 'absolute', top: '-200px', left: '0' }}
-               viewBox='0 0 500 500'>
-            <EnergyLines flow={flowData} pvPoint={pvPoint}
-                         linesColor={(theme.visualization.getColorByName(options.linesColor))} loadPoint={loadPoint}
-                         gridPoint={gridPoint} extraEnergyPoint={additionalPoint} showEnergyThreshold={options.showEnergyThreshold} alwaysShowAdditionalSource={options.additionalSourceAlwaysShow}/>
-          </svg>
-        </div>
+  const color = (key: keyof SimpleOptions) => theme.visualization.getColorByName(options[key] as string);
 
-        <div className="line-holder" style={{ position: 'absolute', bottom: '0px', left: '25px' }}>
-          <div className="point-holder" style={{ position: 'absolute', top: '-300px', left: '150px' }}>
-            <Point label="PV" measurementUnit={options.measurementUnit} showLegend={false} value={flowData.pv}
-                   style={customPoint(theme.visualization.getColorByName(options.solarColor))} icon={icons["solarPanel"]} />
-          </div>
-          {((Math.abs(flowData.additionalSource) > options.showEnergyThreshold) || options.additionalSourceAlwaysShow) && (
-            <div className="point-holder" style={{ position: 'absolute', top: '100px', left: '150px' }}>
-              <Point label={options.additionalSourceLabel} measurementUnit={options.measurementUnit} showLegend={options.showLegend} value={flowData.additionalSource}
-                     subValue={flowData.additionalSourceSOC}
-                     style={customPoint(theme.visualization.getColorByName(options.additionalSourceColor))} icon={icons[options.additionalSourceIcon]} />
-            </div>
-          )}
-          <div className="point-holder" style={{ position: 'absolute', top: -110, left: '25px' }}>
-            <Point showLegend={options.showLegend} measurementUnit={options.measurementUnit} label="Load" value={flowData.load}
-                   style={customPoint(theme.visualization.getColorByName(options.loadColor))} icon={icons['load']} />
-            <Point showLegend={options.showLegend} measurementUnit={options.measurementUnit} label="Grid" value={flowData.grid}
-                   style={customPoint(theme.visualization.getColorByName(options.gridColor))} icon={icons['grid']} />
-          </div>
-        </div>
-      </div>
-    </div>
+  const sourceCount = sourceConfigs.length;
+  const centers = getAdditionalCenters(sourceCount);
+
+  // Determine which sources are visible (for viewBox calculation)
+  const anySourceVisible = flowData.additionalSources.some((s, i) =>
+    Math.abs(s.value) > options.showEnergyThreshold || sourceConfigs[i]?.alwaysShow
+  );
+
+  const speedRef = options.animationSpeedReference ?? 400;
+
+  // Build line data for EnergyLines
+  const additionalSourceLines: AdditionalSourceLineData[] = centers.map((pos, i) => ({
+    point: pos,
+    flow: flowData.additionalSources[i] ?? { value: 0, soc: 0 },
+    alwaysShow: sourceConfigs[i]?.alwaysShow ?? false,
+  }));
+
+  const subJunction: PointPosition | null = sourceCount >= 2 ? { x: MAIN_HUB.x, y: SUB_JUNCTION_Y } : null;
+
+  const pad = options.padding ?? 20;
+  const maxY = anySourceVisible ? EXTENDED_MAX_Y : BASE_BOUNDS.maxY;
+  const vbX = BASE_BOUNDS.minX - pad;
+  const vbY = BASE_BOUNDS.minY - pad;
+  const vbW = BASE_BOUNDS.maxX - BASE_BOUNDS.minX + pad * 2;
+  const vbH = maxY - BASE_BOUNDS.minY + pad * 2;
+
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox={`${vbX} ${vbY} ${vbW} ${vbH}`}
+      preserveAspectRatio="xMidYMid meet"
+      style={{ pointerEvents: 'none' }}
+    >
+      <EnergyLines
+        flow={flowData}
+        pvPoint={PV_LINE_END}
+        loadPoint={LOAD_LINE_END}
+        gridPoint={GRID_LINE_END}
+        additionalSources={additionalSourceLines}
+        subJunction={subJunction}
+        linesColor={color('linesColor')}
+        showEnergyThreshold={options.showEnergyThreshold}
+        measurementUnit={options.measurementUnit}
+        animationSpeedReference={speedRef}
+      />
+
+      {/* Main energy hub */}
+      <circle
+        cx={MAIN_HUB.x}
+        cy={MAIN_HUB.y}
+        r={8}
+        fill={color('linesColor')}
+        style={{
+          filter: `drop-shadow(0px 0px 4px ${color('linesColor')}) drop-shadow(0px 0px 8px ${color('linesColor')})`,
+        }}
+      />
+
+      {/* Sub-junction hub (only when 2-3 additional sources) */}
+      {subJunction && anySourceVisible && (
+        <circle
+          cx={subJunction.x}
+          cy={subJunction.y}
+          r={6}
+          fill={color('linesColor')}
+          style={{
+            filter: `drop-shadow(0px 0px 3px ${color('linesColor')}) drop-shadow(0px 0px 6px ${color('linesColor')})`,
+          }}
+        />
+      )}
+
+      {/* PV / Solar — top center */}
+      <Point
+        x={PV_CENTER.x} y={PV_CENTER.y}
+        label="PV"
+        measurementUnit={options.measurementUnit}
+        showLegend={false}
+        value={flowData.pv}
+        pointStyle={customPoint(color('solarColor'))}
+        icon={ICON_PATHS.solarPanel}
+        energyDirection={flowData.pv > 0 ? 'outgoing' : 'none'}
+        animationDuration={getAnimDuration(flowData.pv, options.measurementUnit, speedRef)}
+      />
+
+      {/* Load — middle left */}
+      <Point
+        x={LOAD_CENTER.x} y={LOAD_CENTER.y}
+        label="Load"
+        measurementUnit={options.measurementUnit}
+        showLegend={options.showLegend}
+        value={flowData.load}
+        pointStyle={customPoint(color('loadColor'))}
+        icon={ICON_PATHS.load}
+        energyDirection={flowData.load > 0 ? 'incoming' : 'none'}
+        animationDuration={getAnimDuration(flowData.load, options.measurementUnit, speedRef)}
+      />
+
+      {/* Grid — middle right */}
+      <Point
+        x={GRID_CENTER.x} y={GRID_CENTER.y}
+        label="Grid"
+        measurementUnit={options.measurementUnit}
+        showLegend={options.showLegend}
+        value={flowData.grid}
+        pointStyle={customPoint(color('gridColor'))}
+        icon={ICON_PATHS.grid}
+        energyDirection={getEnergyDirection(flowData.grid)}
+        animationDuration={getAnimDuration(flowData.grid, options.measurementUnit, speedRef)}
+      />
+
+      {/* Additional source circles */}
+      {centers.map((pos, i) => {
+        const srcFlow = flowData.additionalSources[i];
+        const cfg = sourceConfigs[i];
+        if (!srcFlow || !cfg) { return null; }
+        const visible = Math.abs(srcFlow.value) > options.showEnergyThreshold || cfg.alwaysShow;
+        if (!visible) { return null; }
+        return (
+          <Point
+            key={`src-${cfg.colorKey}`}
+            x={pos.x} y={pos.y}
+            label={cfg.label}
+            measurementUnit={options.measurementUnit}
+            showLegend={options.showLegend}
+            value={srcFlow.value}
+            subValue={srcFlow.soc}
+            pointStyle={customPoint(color(cfg.colorKey))}
+            icon={ICON_PATHS[cfg.icon]}
+            valuePlacement="bottom"
+            energyDirection={getEnergyDirection(srcFlow.value)}
+            animationDuration={getAnimDuration(srcFlow.value, options.measurementUnit, speedRef)}
+          />
+        );
+      })}
+    </svg>
   );
 };
+
