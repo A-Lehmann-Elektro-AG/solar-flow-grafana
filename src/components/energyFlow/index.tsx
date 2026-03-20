@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './index.css';
 import { customPoint, Point } from './energyPoint';
-import { FlowData } from '../../models/flow';
+import { FlowData, MeasurementUnit, UNIT_TO_WATTS } from '../../models/flow';
 import { EnergyFlowCore } from '../../services/energyFlowCore';
 import { EnergyLines } from './energyLine';
 import { useTheme2 } from '@grafana/ui';
@@ -32,13 +32,13 @@ const extractFieldValue = (series: any[], fieldName: string): number => {
 
 // Layout constants — all coordinates in a virtual SVG space.
 // Circle centers (where the Point <g> gets translated to)
-const PV_CENTER: PointPosition = { x: 275, y: 100 };
+const PV_CENTER: PointPosition = { x: 275, y: 90 };
 const LOAD_CENTER: PointPosition = { x: 75, y: 310 };
 const GRID_CENTER: PointPosition = { x: 475, y: 310 };
 const ADDITIONAL_CENTER: PointPosition = { x: 275, y: 520 };
 
 // Line endpoints — EnergyLines derives the junction as (pvLineEnd.x, loadLineEnd.y)
-const PV_LINE_END: PointPosition = { x: 275, y: 175 };       // bottom edge of PV circle
+const PV_LINE_END: PointPosition = { x: 275, y: 145 };       // bottom edge of PV circle
 const LOAD_LINE_END: PointPosition = { x: 75, y: 310 };      // center of load (horizontal line)
 const GRID_LINE_END: PointPosition = { x: 475, y: 310 };     // center of grid (horizontal line)
 const ADDITIONAL_LINE_END: PointPosition = { x: 275, y: 520 }; // center of additional (vertical line)
@@ -47,6 +47,18 @@ const ADDITIONAL_LINE_END: PointPosition = { x: 275, y: 520 }; // center of addi
 const BASE_BOUNDS = { minX: -30, minY: -15, maxX: 580, maxY: 420 };
 // Extended bottom when additional source is visible
 const EXTENDED_MAX_Y = 640;
+
+function getEnergyDirection(value: number): 'incoming' | 'outgoing' | 'none' {
+  if (value > 0) { return 'outgoing'; }
+  if (value < 0) { return 'incoming'; }
+  return 'none';
+}
+
+function getAnimDuration(energy: number, unit: MeasurementUnit, speedRef: number): string {
+  const energyInW = Math.abs(energy) * UNIT_TO_WATTS[unit];
+  const duration = Math.max(0.3, Math.min(2.5, speedRef / Math.max(energyInW, 0.001)));
+  return `${duration.toFixed(2)}s`;
+}
 
 export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options, width, height }) => {
   const theme = useTheme2();
@@ -79,6 +91,15 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options, width, he
 
   const color = (key: keyof SimpleOptions) => theme.visualization.getColorByName(options[key] as string);
   const showAdditionalSource = Math.abs(flowData.additionalSource) > options.showEnergyThreshold || options.additionalSourceAlwaysShow;
+
+  const gridDirection = getEnergyDirection(flowData.grid);
+  const additionalDirection = getEnergyDirection(flowData.additionalSource);
+
+  const speedRef = options.animationSpeedReference ?? 400;
+  const pvDuration = getAnimDuration(flowData.pv, options.measurementUnit, speedRef);
+  const loadDuration = getAnimDuration(flowData.load, options.measurementUnit, speedRef);
+  const gridDuration = getAnimDuration(flowData.grid, options.measurementUnit, speedRef);
+  const additionalDuration = getAnimDuration(flowData.additionalSource, options.measurementUnit, speedRef);
 
   const pad = options.padding ?? 20;
   const maxY = showAdditionalSource ? EXTENDED_MAX_Y : BASE_BOUNDS.maxY;
@@ -117,6 +138,8 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options, width, he
         value={flowData.pv}
         pointStyle={customPoint(color('solarColor'))}
         icon={ICON_PATHS.solarPanel}
+        energyDirection={flowData.pv > 0 ? 'outgoing' : 'none'}
+        animationDuration={pvDuration}
       />
 
       {/* Load — middle left */}
@@ -128,6 +151,8 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options, width, he
         value={flowData.load}
         pointStyle={customPoint(color('loadColor'))}
         icon={ICON_PATHS.load}
+        energyDirection={flowData.load > 0 ? 'incoming' : 'none'}
+        animationDuration={loadDuration}
       />
 
       {/* Grid — middle right */}
@@ -139,6 +164,8 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options, width, he
         value={flowData.grid}
         pointStyle={customPoint(color('gridColor'))}
         icon={ICON_PATHS.grid}
+        energyDirection={gridDirection}
+        animationDuration={gridDuration}
       />
 
       {/* Additional source — bottom center */}
@@ -153,6 +180,8 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options, width, he
           pointStyle={customPoint(color('additionalSourceColor'))}
           icon={ICON_PATHS[options.additionalSourceIcon]}
           valuePlacement="bottom"
+          energyDirection={additionalDirection}
+          animationDuration={additionalDuration}
         />
       )}
     </svg>

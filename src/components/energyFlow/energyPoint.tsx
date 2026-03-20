@@ -13,6 +13,8 @@ interface PointProps {
   showLegend?: boolean;
   measurementUnit: MeasurementUnit;
   valuePlacement?: 'top' | 'bottom';
+  energyDirection?: 'incoming' | 'outgoing' | 'none';
+  animationDuration?: string;
 }
 
 export const customPoint = (color: string) => ({
@@ -22,6 +24,16 @@ export const customPoint = (color: string) => ({
 
 const BASE_RADIUS = 60;
 const OUTER_RADIUS = BASE_RADIUS + 15;
+
+function getRingClasses(direction?: 'incoming' | 'outgoing' | 'none'): [string, string] | null {
+  if (direction === 'outgoing') {
+    return ['ring-out', 'ring-out-delayed'];
+  }
+  if (direction === 'incoming') {
+    return ['ring-in', 'ring-in-delayed'];
+  }
+  return null;
+}
 
 export function Point(props: Readonly<PointProps>) {
   const theme = useTheme2();
@@ -33,9 +45,20 @@ export function Point(props: Readonly<PointProps>) {
   const valueY = valueAtBottom ? OUTER_RADIUS + 25 : -(OUTER_RADIUS + 10);
   const legendY = valueAtBottom ? OUTER_RADIUS + 45 : OUTER_RADIUS + 25;
 
+  const ringClasses = getRingClasses(props.energyDirection);
+  const ringStyle = props.animationDuration
+    ? { ...props.pointStyle, ['--animation-duration' as string]: props.animationDuration } as React.CSSProperties
+    : props.pointStyle;
+
   return (
     <g transform={`translate(${props.x}, ${props.y})`}>
-      <circle r={OUTER_RADIUS} strokeWidth="0.5" fill="transparent" style={props.pointStyle} />
+      {/* Animated emission rings — emit from / collapse into the inner circle */}
+      {ringClasses && (
+        <>
+          <circle className={ringClasses[0]} r={BASE_RADIUS} strokeWidth="1.5" fill="transparent" style={ringStyle} />
+          <circle className={ringClasses[1]} r={BASE_RADIUS} strokeWidth="1.5" fill="transparent" style={ringStyle} />
+        </>
+      )}
       <circle r={BASE_RADIUS} style={props.pointStyle} strokeWidth="1.5" fill={props.pointStyle.stroke} />
       <text fontSize={18} fill={fontColor} x="0" y={valueY} textAnchor="middle">
         {displayValue + ' ' + displayUnit}
