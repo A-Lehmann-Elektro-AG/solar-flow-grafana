@@ -52,19 +52,19 @@ export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoin
       }
 
       {/*Grid line*/}
-      {Math.abs(flow.grid) >= showEnergyThreshold && (
+      {Math.abs(flow.grid) > showEnergyThreshold && (
         <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint} linesColor={linesColor} className={flow.grid < 0 ? "animated-line-reverse" : "animated-line"} animationDuration={getAnimationDuration(flow.grid, measurementUnit, animationSpeedReference)} />
       )
       }
 
       {/*Solar line*/}
-      {flow.pv >= showEnergyThreshold && (
+      {flow.pv > showEnergyThreshold && (
         <EnergyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y}} linesColor={linesColor} className="animated-line-reverse" animationDuration={getAnimationDuration(flow.pv, measurementUnit, animationSpeedReference)} />
       )
       }
 
       {/*Load line*/}
-      {flow.load >= showEnergyThreshold && (
+      {flow.load > showEnergyThreshold && (
         <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={loadPoint} linesColor={linesColor} className="animated-line-reverse" animationDuration={getAnimationDuration(flow.load, measurementUnit, animationSpeedReference)} />
       )
       }
