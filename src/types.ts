@@ -10,6 +10,7 @@ export interface SimpleOptions {
   additionalSourceAlwaysShow: boolean;
   solarQuery: any;
   gridQuery: any;
+  loadQuery: any;
   additionalSourceLoadQuery: any;
   additionalSourceSOCQuery: any;
   showEnergyThreshold: number;

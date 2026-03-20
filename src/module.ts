@@ -17,6 +17,12 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       defaultValue: '',
     })
     .addFieldNamePicker({
+      path: 'loadQuery',
+      name: 'Load Value (optional)',
+      description: 'Select the field for the actual load from the inverter. If set, overrides the calculated value (PV + Grid + Additional).',
+      defaultValue: '',
+    })
+    .addFieldNamePicker({
       path: "additionalSourceLoadQuery",
       name: 'Additional Source Value',
       description: 'Select the field for the Additional source (Battery, EV Panel, etc.) - Deselect to remove',

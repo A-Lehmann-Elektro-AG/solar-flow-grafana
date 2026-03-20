@@ -33,6 +33,7 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options }) => {
 
   const pv = extractFieldValue(data.series, options.solarQuery);
   const grid = extractFieldValue(data.series, options.gridQuery);
+  const measuredLoad = options.loadQuery ? extractFieldValue(data.series, options.loadQuery) : undefined;
   const additionalSource = extractFieldValue(data.series, options.additionalSourceLoadQuery);
   const additionalSourceSOC = extractFieldValue(data.series, options.additionalSourceSOCQuery);
 
@@ -45,8 +46,8 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options }) => {
   });
 
   useEffect(() => {
-    setFlowData(EnergyFlowCore.calculateFlowData(pv, grid, additionalSource, additionalSourceSOC, options.measurementUnit));
-  }, [pv, grid, additionalSource, additionalSourceSOC, options.measurementUnit]);
+    setFlowData(EnergyFlowCore.calculateFlowData(pv, grid, additionalSource, additionalSourceSOC, options.measurementUnit, measuredLoad));
+  }, [pv, grid, measuredLoad, additionalSource, additionalSourceSOC, options.measurementUnit]);
 
   const pvPoint: PointPosition = { x: 275, y: 250 };
   const loadPoint: PointPosition = { x: 100, y: 460 };

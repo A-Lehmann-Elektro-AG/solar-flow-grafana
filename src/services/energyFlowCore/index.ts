@@ -7,9 +7,10 @@ export class EnergyFlowCore {
     additionalSource: number,
     additionalSourceSOC: number,
     unit: MeasurementUnit,
+    measuredLoad?: number,
   ): FlowData {
     const unitFactor = UNIT_TO_WATTS[unit];
-    const load = pv + grid + (additionalSource || 0);
+    const load = measuredLoad ?? (pv + grid + (additionalSource || 0));
 
     return {
       pv: Number((pv / unitFactor).toFixed(3)),
