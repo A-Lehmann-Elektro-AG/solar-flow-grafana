@@ -1,15 +1,15 @@
 import React from 'react';
 import {PointPosition} from './index';
-import {FlowData, UNIT_TO_WATTS} from '../../models/flow';
+import {FlowData, MeasurementUnit, UNIT_TO_WATTS} from '../../models/flow';
 
 interface CustomXarrowProps {
   start: PointPosition;
   end: PointPosition;
-  className?: string;
   linesColor?: string;
 }
 
 interface EnergyLineProps extends CustomXarrowProps {
+  className?: string;
   animationDuration?: string;
 }
 
@@ -22,12 +22,12 @@ interface EnergyLinesProps {
   linesColor: string;
   alwaysShowAdditionalSource: boolean;
   showEnergyThreshold: number;
-  measurementUnit: 'W' | 'kW' | 'MW';
+  measurementUnit: MeasurementUnit;
   animationSpeedReference: number;
 }
 
 // At `speedReference` watts the animation runs at exactly 1 s per cycle.
-const getAnimationDuration = (energy: number, unit: 'W' | 'kW' | 'MW', speedReference: number): string => {
+const getAnimationDuration = (energy: number, unit: MeasurementUnit, speedReference: number): string => {
   const energyInW = Math.abs(energy) * UNIT_TO_WATTS[unit];
   const duration = Math.max(0.3, Math.min(2.5, speedReference / Math.max(energyInW, 0.001)));
   return `${duration.toFixed(2)}s`;

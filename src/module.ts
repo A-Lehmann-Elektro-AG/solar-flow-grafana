@@ -43,13 +43,13 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
     .addSelect({
       path: 'measurementUnit',
       name: 'Select Measurement Unit',
-      description: '',
+      description: 'auto: displays W below 1000, kW above',
       defaultValue: 'kW',
       settings: {
         options: [
+          { value: 'auto', label: 'Auto (W / kW)' },
           { value: 'kW', label: 'kW' },
           { value: 'W', label: 'W' },
-          // { value: 'MW', label: 'MW' },
         ],
       }
     })

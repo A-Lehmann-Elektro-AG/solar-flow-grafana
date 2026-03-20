@@ -13,7 +13,7 @@ export interface SimpleOptions {
   additionalSourceLoadQuery: any;
   additionalSourceSOCQuery: any;
   showEnergyThreshold: number;
-  measurementUnit: 'W' | 'kW' | 'MW';
+  measurementUnit: 'W' | 'kW' | 'MW' | 'auto';
   animationSpeedReference: number;
   zoom: number;
   xOffset: number;

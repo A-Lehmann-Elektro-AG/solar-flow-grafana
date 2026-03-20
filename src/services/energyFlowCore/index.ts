@@ -1,4 +1,4 @@
-import { FlowData, UNIT_TO_WATTS } from '../../models/flow';
+import { FlowData, MeasurementUnit, UNIT_TO_WATTS } from '../../models/flow';
 
 export class EnergyFlowCore {
   public static calculateFlowData(
@@ -6,7 +6,7 @@ export class EnergyFlowCore {
     grid: number,
     additionalSource: number,
     additionalSourceSOC: number,
-    unit: 'W' | 'kW' | 'MW',
+    unit: MeasurementUnit,
   ): FlowData {
     const unitFactor = UNIT_TO_WATTS[unit];
     const load = pv + grid + (additionalSource || 0);
