@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import './index.css';
 import { customPoint, Point } from './energyPoint';
 import { FlowData, MeasurementUnit, UNIT_TO_WATTS } from '../../models/flow';
 import { EnergyFlowCore, RawAdditionalSource } from '../../services/energyFlowCore';

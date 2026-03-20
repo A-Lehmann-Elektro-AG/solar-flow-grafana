@@ -23,7 +23,12 @@
         "name": "Official Organization Website",
         "url": "https://lehmann.ch/"
       }],
-    "screenshots": [],
+    "screenshots": [
+      {
+        "name": "Screenshot",
+        "path": "img_6.png"
+      }
+    ],
     "version": "%VERSION%",
     "updated": "2026-03-20"
   },

@@ -1,6 +1,7 @@
 import React from 'react';
 import {PointPosition} from './index';
 import {FlowData, AdditionalSourceFlow, MeasurementUnit, UNIT_TO_WATTS} from '../../models/flow';
+import { animatedLine, animatedLineReverse } from './styles';
 
 interface CustomXarrowProps {
   start: PointPosition;
@@ -64,7 +65,7 @@ export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoin
           <>
             <EmptyLine start={src.point} end={{x: mainHub.x, y: mainHub.y + 2}} />
             {Math.abs(srcFlow.value) > showEnergyThreshold && (
-              <EnergyLine start={src.point} end={mainHub} linesColor={linesColor} className={srcFlow.value < 0 ? 'animated-line' : 'animated-line-reverse'} animationDuration={getAnimationDuration(srcFlow.value, measurementUnit, animationSpeedReference)} />
+              <EnergyLine start={src.point} end={mainHub} linesColor={linesColor} className={srcFlow.value < 0 ? animatedLine : animatedLineReverse} animationDuration={getAnimationDuration(srcFlow.value, measurementUnit, animationSpeedReference)} />
             )}
           </>
         ) : null;
@@ -109,7 +110,7 @@ export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoin
                     start={src.point}
                     end={{ x: src.point.x, y: sjY }}
                     linesColor={linesColor}
-                    className={srcFlow.value < 0 ? 'animated-line' : 'animated-line-reverse'}
+                    className={srcFlow.value < 0 ? animatedLine : animatedLineReverse}
                     animationDuration={getAnimationDuration(srcFlow.value, measurementUnit, animationSpeedReference)}
                   />
                   {/* Horizontal: source's X at sub-junction Y → sub-junction center */}
@@ -118,7 +119,7 @@ export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoin
                       start={{ x: src.point.x, y: sjY }}
                       end={subJunction}
                       linesColor={linesColor}
-                      className={srcFlow.value < 0 ? 'animated-line' : 'animated-line-reverse'}
+                      className={srcFlow.value < 0 ? animatedLine : animatedLineReverse}
                       animationDuration={getAnimationDuration(srcFlow.value, measurementUnit, animationSpeedReference)}
                     />
                   )}
@@ -128,7 +129,7 @@ export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoin
 
             {/* Aggregated animated line from sub-junction to main hub */}
             {Math.abs(totalAdditionalEnergy) > showEnergyThreshold && (
-              <EnergyLine start={subJunction} end={mainHub} linesColor={linesColor} className={totalAdditionalEnergy < 0 ? 'animated-line' : 'animated-line-reverse'} animationDuration={getAnimationDuration(totalAdditionalEnergy, measurementUnit, animationSpeedReference)} />
+              <EnergyLine start={subJunction} end={mainHub} linesColor={linesColor} className={totalAdditionalEnergy < 0 ? animatedLine : animatedLineReverse} animationDuration={getAnimationDuration(totalAdditionalEnergy, measurementUnit, animationSpeedReference)} />
             )}
           </>
         );
@@ -136,17 +137,17 @@ export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoin
 
       {/* Grid line */}
       {Math.abs(flow.grid) > showEnergyThreshold && (
-        <EnergyLine start={mainHub} end={gridPoint} linesColor={linesColor} className={flow.grid < 0 ? 'animated-line-reverse' : 'animated-line'} animationDuration={getAnimationDuration(flow.grid, measurementUnit, animationSpeedReference)} />
+        <EnergyLine start={mainHub} end={gridPoint} linesColor={linesColor} className={flow.grid < 0 ? animatedLineReverse : animatedLine} animationDuration={getAnimationDuration(flow.grid, measurementUnit, animationSpeedReference)} />
       )}
 
       {/* Solar line */}
       {flow.pv > showEnergyThreshold && (
-        <EnergyLine start={pvPoint} end={mainHub} linesColor={linesColor} className="animated-line-reverse" animationDuration={getAnimationDuration(flow.pv, measurementUnit, animationSpeedReference)} />
+        <EnergyLine start={pvPoint} end={mainHub} linesColor={linesColor} className={animatedLineReverse} animationDuration={getAnimationDuration(flow.pv, measurementUnit, animationSpeedReference)} />
       )}
 
       {/* Load line */}
       {flow.load > showEnergyThreshold && (
-        <EnergyLine start={mainHub} end={loadPoint} linesColor={linesColor} className="animated-line-reverse" animationDuration={getAnimationDuration(flow.load, measurementUnit, animationSpeedReference)} />
+        <EnergyLine start={mainHub} end={loadPoint} linesColor={linesColor} className={animatedLineReverse} animationDuration={getAnimationDuration(flow.load, measurementUnit, animationSpeedReference)} />
       )}
     </>
   );

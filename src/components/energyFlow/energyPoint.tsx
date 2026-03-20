@@ -1,6 +1,7 @@
 import React from "react";
 import {useTheme2} from "@grafana/ui";
 import { MeasurementUnit, formatEnergyValue } from '../../models/flow';
+import { ringOut, ringOutDelayed, ringIn, ringInDelayed } from './styles';
 
 interface PointProps {
   x: number;
@@ -27,10 +28,10 @@ const OUTER_RADIUS = BASE_RADIUS + 15;
 
 function getRingClasses(direction?: 'incoming' | 'outgoing' | 'none'): [string, string] | null {
   if (direction === 'outgoing') {
-    return ['ring-out', 'ring-out-delayed'];
+    return [ringOut, ringOutDelayed];
   }
   if (direction === 'incoming') {
-    return ['ring-in', 'ring-in-delayed'];
+    return [ringIn, ringInDelayed];
   }
   return null;
 }
