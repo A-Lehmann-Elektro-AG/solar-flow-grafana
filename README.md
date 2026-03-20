@@ -85,4 +85,4 @@ npm run test:ci    # Run tests
 
 ## Example
 
-![example.gif](example.gif)
+![example](https://github.com/A-Lehmann-Elektro-AG/solar-flow-grafana/raw/main/example.gif)
