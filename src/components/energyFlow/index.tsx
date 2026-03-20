@@ -16,6 +16,8 @@ export interface PointPosition {
 export interface EnergyFlowProps {
   data: any;
   options: SimpleOptions;
+  width: number;
+  height: number;
 }
 
 const extractFieldValue = (series: any[], fieldName: string): number => {
@@ -28,7 +30,25 @@ const extractFieldValue = (series: any[], fieldName: string): number => {
   return 0;
 };
 
-export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options }) => {
+// Layout constants — all coordinates in a virtual SVG space.
+// Circle centers (where the Point <g> gets translated to)
+const PV_CENTER: PointPosition = { x: 275, y: 100 };
+const LOAD_CENTER: PointPosition = { x: 75, y: 310 };
+const GRID_CENTER: PointPosition = { x: 475, y: 310 };
+const ADDITIONAL_CENTER: PointPosition = { x: 275, y: 520 };
+
+// Line endpoints — EnergyLines derives the junction as (pvLineEnd.x, loadLineEnd.y)
+const PV_LINE_END: PointPosition = { x: 275, y: 175 };       // bottom edge of PV circle
+const LOAD_LINE_END: PointPosition = { x: 75, y: 310 };      // center of load (horizontal line)
+const GRID_LINE_END: PointPosition = { x: 475, y: 310 };     // center of grid (horizontal line)
+const ADDITIONAL_LINE_END: PointPosition = { x: 275, y: 520 }; // center of additional (vertical line)
+
+// Bounding box without additional source
+const BASE_BOUNDS = { minX: -30, minY: -15, maxX: 580, maxY: 420 };
+// Extended bottom when additional source is visible
+const EXTENDED_MAX_Y = 640;
+
+export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options, width, height }) => {
   const theme = useTheme2();
 
   const pv = extractFieldValue(data.series, options.solarQuery);
@@ -49,11 +69,6 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options }) => {
     setFlowData(EnergyFlowCore.calculateFlowData(pv, grid, additionalSource, additionalSourceSOC, options.measurementUnit, measuredLoad));
   }, [pv, grid, measuredLoad, additionalSource, additionalSourceSOC, options.measurementUnit]);
 
-  const pvPoint: PointPosition = { x: 275, y: 250 };
-  const loadPoint: PointPosition = { x: 100, y: 460 };
-  const gridPoint: PointPosition = { x: 450, y: 460 };
-  const additionalPoint: PointPosition = { x: 275, y: 650 };
-
   if (data.series.length < 1) {
     return (
       <div style={{ backgroundColor: 'red', padding: '5%', borderRadius: '5px', width: '200px', textAlign: 'center' }}>
@@ -65,83 +80,82 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options }) => {
   const color = (key: keyof SimpleOptions) => theme.visualization.getColorByName(options[key] as string);
   const showAdditionalSource = Math.abs(flowData.additionalSource) > options.showEnergyThreshold || options.additionalSourceAlwaysShow;
 
+  const pad = options.padding ?? 20;
+  const maxY = showAdditionalSource ? EXTENDED_MAX_Y : BASE_BOUNDS.maxY;
+  const vbX = BASE_BOUNDS.minX - pad;
+  const vbY = BASE_BOUNDS.minY - pad;
+  const vbW = BASE_BOUNDS.maxX - BASE_BOUNDS.minX + pad * 2;
+  const vbH = maxY - BASE_BOUNDS.minY + pad * 2;
+
   return (
-    <div
-      style={{
-        position: 'absolute',
-        left: `calc(${-165 + options.xOffset}px - 50%)`,
-        top: `calc(${-options.yOffset}px - 50%)`,
-        transform: `scale(${options.zoom})`,
-        transformOrigin: '270px 0px',
-        pointerEvents: 'none',
-      }}
+    <svg
+      width={width}
+      height={height}
+      viewBox={`${vbX} ${vbY} ${vbW} ${vbH}`}
+      preserveAspectRatio="xMidYMid meet"
+      style={{ pointerEvents: 'none' }}
     >
-      <div>
-        <div className="line-holder" style={{ position: 'absolute', bottom: '500px', left: '0px' }}>
-          <svg width="500" height="1000" style={{ position: 'absolute', top: '-200px', left: '0' }} viewBox="0 0 500 500">
-            <EnergyLines
-              flow={flowData}
-              pvPoint={pvPoint}
-              loadPoint={loadPoint}
-              gridPoint={gridPoint}
-              extraEnergyPoint={additionalPoint}
-              linesColor={color('linesColor')}
-              showEnergyThreshold={options.showEnergyThreshold}
-              alwaysShowAdditionalSource={options.additionalSourceAlwaysShow}
-              measurementUnit={options.measurementUnit}
-              animationSpeedReference={options.animationSpeedReference ?? 400}
-            />
-          </svg>
-        </div>
+      <EnergyLines
+        flow={flowData}
+        pvPoint={PV_LINE_END}
+        loadPoint={LOAD_LINE_END}
+        gridPoint={GRID_LINE_END}
+        extraEnergyPoint={ADDITIONAL_LINE_END}
+        linesColor={color('linesColor')}
+        showEnergyThreshold={options.showEnergyThreshold}
+        alwaysShowAdditionalSource={options.additionalSourceAlwaysShow}
+        measurementUnit={options.measurementUnit}
+        animationSpeedReference={options.animationSpeedReference ?? 400}
+      />
 
-        <div className="line-holder" style={{ position: 'absolute', bottom: '0px', left: '25px' }}>
-          <div className="point-holder" style={{ position: 'absolute', top: '-300px', left: '150px' }}>
-            <Point
-              label="PV"
-              measurementUnit={options.measurementUnit}
-              showLegend={false}
-              value={flowData.pv}
-              style={customPoint(color('solarColor'))}
-              icon={ICON_PATHS.solarPanel}
-            />
-          </div>
+      {/* PV / Solar — top center */}
+      <Point
+        x={PV_CENTER.x} y={PV_CENTER.y}
+        label="PV"
+        measurementUnit={options.measurementUnit}
+        showLegend={false}
+        value={flowData.pv}
+        pointStyle={customPoint(color('solarColor'))}
+        icon={ICON_PATHS.solarPanel}
+      />
 
-          {showAdditionalSource && (
-            <div className="point-holder" style={{ position: 'absolute', top: '100px', left: '150px' }}>
-              <Point
-                label={options.additionalSourceLabel}
-                measurementUnit={options.measurementUnit}
-                showLegend={options.showLegend}
-                value={flowData.additionalSource}
-                subValue={flowData.additionalSourceSOC}
-                style={customPoint(color('additionalSourceColor'))}
-                icon={ICON_PATHS[options.additionalSourceIcon]}
-                valuePlacement="bottom"
-              />
-            </div>
-          )}
+      {/* Load — middle left */}
+      <Point
+        x={LOAD_CENTER.x} y={LOAD_CENTER.y}
+        label="Load"
+        measurementUnit={options.measurementUnit}
+        showLegend={options.showLegend}
+        value={flowData.load}
+        pointStyle={customPoint(color('loadColor'))}
+        icon={ICON_PATHS.load}
+      />
 
-          <div className="point-holder" style={{ position: 'absolute', top: -110, left: '25px' }}>
-            <Point
-              label="Load"
-              measurementUnit={options.measurementUnit}
-              showLegend={options.showLegend}
-              value={flowData.load}
-              style={customPoint(color('loadColor'))}
-              icon={ICON_PATHS.load}
-            />
-            <Point
-              label="Grid"
-              measurementUnit={options.measurementUnit}
-              showLegend={options.showLegend}
-              value={flowData.grid}
-              style={customPoint(color('gridColor'))}
-              icon={ICON_PATHS.grid}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+      {/* Grid — middle right */}
+      <Point
+        x={GRID_CENTER.x} y={GRID_CENTER.y}
+        label="Grid"
+        measurementUnit={options.measurementUnit}
+        showLegend={options.showLegend}
+        value={flowData.grid}
+        pointStyle={customPoint(color('gridColor'))}
+        icon={ICON_PATHS.grid}
+      />
+
+      {/* Additional source — bottom center */}
+      {showAdditionalSource && (
+        <Point
+          x={ADDITIONAL_CENTER.x} y={ADDITIONAL_CENTER.y}
+          label={options.additionalSourceLabel}
+          measurementUnit={options.measurementUnit}
+          showLegend={options.showLegend}
+          value={flowData.additionalSource}
+          subValue={flowData.additionalSourceSOC}
+          pointStyle={customPoint(color('additionalSourceColor'))}
+          icon={ICON_PATHS[options.additionalSourceIcon]}
+          valuePlacement="bottom"
+        />
+      )}
+    </svg>
   );
 };
 

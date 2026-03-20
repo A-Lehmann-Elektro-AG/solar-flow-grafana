@@ -90,42 +90,17 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
         step: 100,
       },
     })
-    .addSliderInput(
-      {
-        path: 'zoom',
-        name: 'Zoom',
-        defaultValue: 1,
-        settings: {
-          min: 0.1,
-          max: 3,
-          step: 0.05,
-        },
-      }
-    )
     .addSliderInput({
-      path: 'xOffset',
-      name: 'Offset',
-      description: 'X-Offset',
-      defaultValue:   0,
+      path: 'padding',
+      name: 'Padding',
+      description: 'Space between the flow diagram and the panel edges',
+      defaultValue: 20,
       settings: {
-        min: -500,
-        max: 500,
-        step: 1,
+        min: 0,
+        max: 100,
+        step: 5,
       },
     })
-    .addSliderInput(
-      {
-        path: 'yOffset',
-        name: '',
-        description: 'Y-Offset',
-        defaultValue: 0,
-        settings: {
-          min: -500,
-          max: 500,
-          step: 1,
-        },
-      }
-    )
     .addColorPicker({
       path: 'solarColor',
       name: 'Color palette',

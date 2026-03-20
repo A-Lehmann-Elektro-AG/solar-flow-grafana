@@ -1,20 +1,3 @@
-.point {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 1;
-  margin: 5% 10%;
-}
-
-.point-holder {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin: 0 10%;
-}
-
-
 .animated-line {
   stroke-dasharray: 6 20;
   stroke-linecap: round;

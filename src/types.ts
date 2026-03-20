@@ -16,7 +16,5 @@ export interface SimpleOptions {
   showEnergyThreshold: number;
   measurementUnit: 'W' | 'kW' | 'MW' | 'auto';
   animationSpeedReference: number;
-  zoom: number;
-  xOffset: number;
-  yOffset: number;
+  padding: number;
 }
