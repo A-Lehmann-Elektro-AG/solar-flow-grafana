@@ -4,51 +4,31 @@ import {SimplePanel} from './components/SimplePanel';
 
 export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions((builder) => {
   return builder
+    // ── Data Sources ──────────────────────────────────────
     .addFieldNamePicker({
       path: 'solarQuery',
       name: 'Solar Value',
       description: 'Select the field for the solar data',
       defaultValue: '',
+      category: ['Data Sources'],
     })
     .addFieldNamePicker({
       path: 'gridQuery',
       name: 'Grid Value',
-      description: 'Select the field for the load data',
+      description: 'Select the field for the grid data',
       defaultValue: '',
+      category: ['Data Sources'],
     })
     .addFieldNamePicker({
       path: 'loadQuery',
       name: 'Load Value (optional)',
       description: 'Select the field for the actual load from the inverter. If set, overrides the calculated value (PV + Grid + Additional).',
       defaultValue: '',
-    })
-    .addFieldNamePicker({
-      path: "additionalSourceLoadQuery",
-      name: 'Additional Source Value',
-      description: 'Select the field for the Additional source (Battery, EV Panel, etc.) - Deselect to remove',
-      defaultValue: '',
-    })
-    .addFieldNamePicker({
-      path: "additionalSourceSOCQuery",
-      name: 'Additional Source SOC Value',
-      description: 'Select the field for the Additional sources SOC (Battery, EV Panel, etc.) - Deselect to remove',
-      defaultValue: '',
-    })
-    .addTextInput({
-      path: 'additionalSourceLabel',
-      name: 'Additional Source Label',
-      description: 'Label for the Additional source',
-      defaultValue: 'Battery',
-    })
-    .addBooleanSwitch({
-      path: 'additionalSourceAlwaysShow',
-      name: 'Always show additional source',
-      description: 'Always show the additional source, even if input is 0',
-      defaultValue: false,
+      category: ['Data Sources'],
     })
     .addSelect({
       path: 'measurementUnit',
-      name: 'Select Measurement Unit',
+      name: 'Measurement Unit',
       description: 'auto: displays W below 1000, kW above',
       defaultValue: 'kW',
       settings: {
@@ -57,11 +37,35 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
           { value: 'kW', label: 'kW' },
           { value: 'W', label: 'W' },
         ],
-      }
+      },
+      category: ['Data Sources'],
+    })
+
+    // ── Additional Source ─────────────────────────────────
+    .addFieldNamePicker({
+      path: "additionalSourceLoadQuery",
+      name: 'Value',
+      description: 'Select the field for the Additional source (Battery, EV Panel, etc.) - Deselect to remove',
+      defaultValue: '',
+      category: ['Additional Source'],
+    })
+    .addFieldNamePicker({
+      path: "additionalSourceSOCQuery",
+      name: 'SOC Value',
+      description: 'Select the field for the Additional sources SOC (Battery, EV Panel, etc.) - Deselect to remove',
+      defaultValue: '',
+      category: ['Additional Source'],
+    })
+    .addTextInput({
+      path: 'additionalSourceLabel',
+      name: 'Label',
+      description: 'Label for the Additional source',
+      defaultValue: 'Battery',
+      category: ['Additional Source'],
     })
     .addSelect({
       path: 'additionalSourceIcon',
-      name: 'Additional Source Icon',
+      name: 'Icon',
       description: 'Icon for the Additional source',
       defaultValue: 'battery',
       settings: {
@@ -70,18 +74,28 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
           { value: 'evPanel', label: 'EV Panel' },
           { value: 'solarPanel', label: 'Solar Panel' },
         ],
-      }
+      },
+      category: ['Additional Source'],
     })
+    .addBooleanSwitch({
+      path: 'additionalSourceAlwaysShow',
+      name: 'Always Show',
+      description: 'Always show the additional source, even if input is 0',
+      defaultValue: false,
+      category: ['Additional Source'],
+    })
+
+    // ── Animation ─────────────────────────────────────────
     .addNumberInput({
-        path: 'showEnergyThreshold',
-        name: 'Energy line threshold',
-        description: 'Threshold for showing energy lines',
-        defaultValue: 0,
-      }
-    )
+      path: 'showEnergyThreshold',
+      name: 'Energy Line Threshold',
+      description: 'Threshold for showing energy lines',
+      defaultValue: 0,
+      category: ['Animation'],
+    })
     .addSliderInput({
       path: 'animationSpeedReference',
-      name: 'Animation speed reference (W)',
+      name: 'Speed Reference (W)',
       description: 'Power level (in watts) at which the animation runs at 1 s per cycle. Lower = faster at low values; higher = slower until high values.',
       defaultValue: 400,
       settings: {
@@ -89,7 +103,10 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
         max: 5000,
         step: 100,
       },
+      category: ['Animation'],
     })
+
+    // ── Layout ────────────────────────────────────────────
     .addSliderInput({
       path: 'padding',
       name: 'Padding',
@@ -100,41 +117,50 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
         max: 100,
         step: 5,
       },
-    })
-    .addColorPicker({
-      path: 'solarColor',
-      name: 'Color palette',
-      description: 'Solar Color',
-      defaultValue: 'rgb(244, 174, 1)',
-    })
-    .addColorPicker({
-      path: 'loadColor',
-      name: '',
-      description: 'Load Color',
-      defaultValue: 'rgb(0, 141, 209)',
-    })
-    .addColorPicker({
-      path: 'gridColor',
-      name: '',
-      description: 'Grid Color',
-      defaultValue: 'rgb(232, 41, 26)',
-    })
-    .addColorPicker({
-      path: 'additionalSourceColor',
-      name: '',
-      description: 'Additional Source Color',
-      defaultValue: 'rgb(81, 187, 67)',
-    })
-    .addColorPicker({
-      path: 'linesColor',
-      name: '',
-      description: 'Lines Color',
-      defaultValue: 'rgb(104, 193, 255)',
+      category: ['Layout'],
     })
     .addBooleanSwitch({
       path: 'showLegend',
-      name: 'Show legend',
+      name: 'Show Legend',
       description: 'Label the energy points',
       defaultValue: false,
+      category: ['Layout'],
+    })
+
+    // ── Colors ────────────────────────────────────────────
+    .addColorPicker({
+      path: 'solarColor',
+      name: 'Solar',
+      description: 'Solar circle color',
+      defaultValue: 'rgb(244, 174, 1)',
+      category: ['Colors'],
+    })
+    .addColorPicker({
+      path: 'loadColor',
+      name: 'Load',
+      description: 'Load circle color',
+      defaultValue: 'rgb(0, 141, 209)',
+      category: ['Colors'],
+    })
+    .addColorPicker({
+      path: 'gridColor',
+      name: 'Grid',
+      description: 'Grid circle color',
+      defaultValue: 'rgb(232, 41, 26)',
+      category: ['Colors'],
+    })
+    .addColorPicker({
+      path: 'additionalSourceColor',
+      name: 'Additional Source',
+      description: 'Additional source circle color',
+      defaultValue: 'rgb(81, 187, 67)',
+      category: ['Colors'],
+    })
+    .addColorPicker({
+      path: 'linesColor',
+      name: 'Lines',
+      description: 'Energy lines color',
+      defaultValue: 'rgb(104, 193, 255)',
+      category: ['Colors'],
     });
 });
