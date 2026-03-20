@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Run workflow on version tags, e.g. v1.0.0.
+
+jobs:
+  release:
+    permissions:
+      id-token: write
+      contents: write
+      attestations: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: grafana/plugin-actions/build-plugin@main
+        with:
+          # Refer to https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin#generate-an-access-policy-token
+          # Save the token value in your repository secrets
+          policy_token: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
+          # Creates a signed build provenance attestation to verify the authenticity of the plugin build
+          attestation: true
+          # Enable automatic changelog generation
+          use_changelog_generator: true
