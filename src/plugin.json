@@ -25,8 +25,20 @@
       }],
     "screenshots": [
       {
-        "name": "Screenshot",
-        "path": "img_6.png"
+        "name": "Screenshot 1",
+        "path": "img/showcase1.png"
+      },
+      {
+        "name": "Screenshot 2",
+        "path": "img/showcase2.png"
+      },
+      {
+        "name": "Screenshot 3",
+        "path": "img/showcase3.png"
+      },
+      {
+        "name": "Screenshot 4",
+        "path": "img/showcase4.png"
       }
     ],
     "version": "%VERSION%",

@@ -18,43 +18,134 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
-        "type": "grafana",
-        "uid": "grafana"
+        "type": "grafana-testdata-datasource",
+        "uid": "d61896e4-e5b0-4b88-a9a7-8071fe44525f"
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 19,
+        "w": 9,
         "x": 0,
         "y": 0
       },
       "id": 1,
       "options": {
-        "seriesCountSize": "sm",
-        "showSeriesCount": false,
-        "text": "Default value of text input option"
+        "additionalSource2AlwaysShow": true,
+        "additionalSource2Color": "blue",
+        "additionalSource2Icon": "evPanel",
+        "additionalSource2Label": "Wallbox",
+        "additionalSource2LoadQuery": "Wallbox-series",
+        "additionalSource2SOCQuery": "",
+        "additionalSource3AlwaysShow": true,
+        "additionalSource3Color": "blue",
+        "additionalSource3Icon": "evPanel",
+        "additionalSource3Label": "Wallbox 2",
+        "additionalSource3LoadQuery": "Wallbox-series",
+        "additionalSource3SOCQuery": "",
+        "additionalSourceAlwaysShow": true,
+        "additionalSourceColor": "rgb(81, 187, 67)",
+        "additionalSourceCount": 3,
+        "additionalSourceIcon": "battery",
+        "additionalSourceLabel": "Battery",
+        "additionalSourceLoadQuery": "Additional-series",
+        "additionalSourceSOCQuery": "Battery SOC-series",
+        "animationSpeedReference": 400,
+        "gridColor": "rgb(232, 41, 26)",
+        "gridQuery": "Grid-series",
+        "linesColor": "rgb(104, 193, 255)",
+        "loadColor": "rgb(0, 141, 209)",
+        "loadQuery": "",
+        "measurementUnit": "auto",
+        "padding": 15,
+        "showEnergyThreshold": 0,
+        "showLegend": true,
+        "solarColor": "rgb(244, 174, 1)",
+        "solarQuery": "Solar-series",
+        "xOffset": 0,
+        "yOffset": 0,
+        "zoom": 1
       },
       "targets": [
         {
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "grafana-testdata-datasource",
+            "uid": "d61896e4-e5b0-4b88-a9a7-8071fe44525f"
           },
-          "queryType": "randomWalk",
-          "refId": "A"
+          "refId": "Solar",
+          "scenarioId": "csv_metric_values",
+          "stringInput": "348"
+        },
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "d61896e4-e5b0-4b88-a9a7-8071fe44525f"
+          },
+          "hide": false,
+          "refId": "Grid",
+          "scenarioId": "csv_metric_values",
+          "stringInput": "0"
+        },
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "d61896e4-e5b0-4b88-a9a7-8071fe44525f"
+          },
+          "hide": false,
+          "refId": "Additional",
+          "scenarioId": "csv_metric_values",
+          "stringInput": "267"
+        },
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "d61896e4-e5b0-4b88-a9a7-8071fe44525f"
+          },
+          "hide": false,
+          "refId": "Load (Optional)",
+          "scenarioId": "csv_metric_values",
+          "stringInput": "5500"
+        },
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "d61896e4-e5b0-4b88-a9a7-8071fe44525f"
+          },
+          "hide": false,
+          "refId": "Wallbox",
+          "scenarioId": "csv_metric_values",
+          "stringInput": "-100"
+        },
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "d61896e4-e5b0-4b88-a9a7-8071fe44525f"
+          },
+          "hide": false,
+          "refId": "Battery SOC",
+          "scenarioId": "csv_metric_values",
+          "stringInput": "58"
+        },
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "d61896e4-e5b0-4b88-a9a7-8071fe44525f"
+          },
+          "hide": false,
+          "refId": "Wallbox 2",
+          "scenarioId": "csv_metric_values",
+          "stringInput": "-100"
         }
       ],
-      "title": "Panel Title",
       "type": "lehmannch-flow-panel"
     }
   ],
   "refresh": "",
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": []
@@ -65,7 +156,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Provisioned grafplugin-test dashboard",
-  "version": 0,
+  "title": "New dashboard",
+  "uid": "c3c90dad-b347-460b-9661-c7a29746484b",
+  "version": 20,
   "weekStart": ""
 }

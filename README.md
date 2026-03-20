@@ -2,6 +2,10 @@
 
 Solar Flow is an animated visualization of solar panel energy flow, designed as a Grafana panel plugin. It shows real-time energy movement between PV, Grid, Load, and up to 3 additional sources (battery, wallbox, etc.) with smooth particle-style animations.
 
+## Showcase
+
+![example](https://raw.githubusercontent.com/A-Lehmann-Elektro-AG/solar-flow-grafana/refs/heads/main/src/img/example.gif)
+
 ## Installation
 
 1. Add the Solar Flow plugin to your Grafana dashboard
@@ -82,7 +86,3 @@ npm run lint       # Lint
 npm run typecheck  # Type check
 npm run test:ci    # Run tests
 ```
-
-## Example
-
-![example](https://github.com/A-Lehmann-Elektro-AG/solar-flow-grafana/raw/main/example.gif)
