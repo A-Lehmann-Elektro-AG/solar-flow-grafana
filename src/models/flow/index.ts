@@ -19,10 +19,14 @@ export function formatEnergyValue(value: number, unit: MeasurementUnit): { displ
     return { displayValue: String(value), displayUnit: 'W' };
 }
 
+export interface AdditionalSourceFlow {
+    value: number;
+    soc: number;
+}
+
 export interface FlowData {
     pv: number;
     grid: number;
     load: number;
-    additionalSource: number;
-    additionalSourceSOC: number;
+    additionalSources: AdditionalSourceFlow[];
 }
