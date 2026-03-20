@@ -129,6 +129,18 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options, width, he
         animationSpeedReference={options.animationSpeedReference ?? 400}
       />
 
+      {/* Energy hub — small circle at the junction where all lines meet */}
+      <circle
+        cx={PV_LINE_END.x}
+        cy={LOAD_LINE_END.y}
+        r={8}
+        fill={color('linesColor')}
+        opacity={1}
+        style={{
+          filter: `drop-shadow(0px 0px 4px ${color('linesColor')}) drop-shadow(0px 0px 8px ${color('linesColor')})`,
+        }}
+      />
+
       {/* PV / Solar — top center */}
       <Point
         x={PV_CENTER.x} y={PV_CENTER.y}
