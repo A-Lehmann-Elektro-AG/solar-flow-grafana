@@ -1,6 +1,6 @@
 {
   "name": "grafplugin-test",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A Grafana panel plugin to visualize the production flow of solar panels.",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
