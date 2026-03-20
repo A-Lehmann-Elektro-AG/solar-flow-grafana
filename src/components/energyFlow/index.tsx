@@ -115,6 +115,7 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options }) => {
                 subValue={flowData.additionalSourceSOC}
                 style={customPoint(color('additionalSourceColor'))}
                 icon={ICON_PATHS[options.additionalSourceIcon]}
+                valuePlacement="bottom"
               />
             </div>
           )}
