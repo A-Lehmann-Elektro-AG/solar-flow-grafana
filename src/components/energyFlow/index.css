@@ -16,17 +16,19 @@
 
 
 .animated-line {
-  stroke-dasharray: 17;
-  animation: dash 1s linear infinite;
+  stroke-dasharray: 6 20;
+  stroke-linecap: round;
+  animation: dash var(--animation-duration, 1s) linear infinite;
 }
 
 .animated-line-reverse {
-  stroke-dasharray: 17;
-  animation: dash 1s linear infinite reverse;
+  stroke-dasharray: 6 20;
+  stroke-linecap: round;
+  animation: dash var(--animation-duration, 1s) linear infinite reverse;
 }
 
 @keyframes dash {
   to {
-    stroke-dashoffset: 34;
+    stroke-dashoffset: 26;
   }
 }

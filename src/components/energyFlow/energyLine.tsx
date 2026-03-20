@@ -2,6 +2,19 @@ import React from "react";
 import {PointPosition} from "./index";
 import { CustomXarrowProps, FlowData } from '../../models/flow';
 
+const UNIT_TO_WATTS: Record<string, number> = { W: 1, kW: 1000, MW: 1000000 };
+// Reference: 1000 W (1 kW) produces a 1 s animation cycle.
+// Effective speed range: ~200 W (slow, 2.5 s) → ~3300 W (fast, 0.3 s)
+const getAnimationDuration = (energy: number, unit: string): string => {
+  const energyInW = Math.abs(energy) * (UNIT_TO_WATTS[unit] ?? 1);
+  const duration = Math.max(0.3, Math.min(2.5, 400 / Math.max(energyInW, 0.001)));
+  return `${duration.toFixed(2)}s`;
+};
+
+interface EnergyLineProps extends CustomXarrowProps {
+  animationDuration?: string;
+}
+
 interface EnergyLinesProps {
  flow: FlowData;
  pvPoint: PointPosition;
@@ -11,10 +24,11 @@ interface EnergyLinesProps {
  linesColor: string;
  alwaysShowAdditionalSource: boolean;
  showEnergyThreshold: number;
+ measurementUnit: string;
 }
 
 
-export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoint, gridPoint, extraEnergyPoint, linesColor, showEnergyThreshold, alwaysShowAdditionalSource}) => {
+export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoint, gridPoint, extraEnergyPoint, linesColor, showEnergyThreshold, alwaysShowAdditionalSource, measurementUnit}) => {
   return (
     <>
       <EmptyLine start={{x: pvPoint.x + 2, y: loadPoint.y}} end={gridPoint}/>
@@ -25,7 +39,7 @@ export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoin
         <>
           <EmptyLine start={extraEnergyPoint} end={{x: pvPoint.x, y: loadPoint.y + 2}}/>
           { Math.abs(flow.additionalSource) > showEnergyThreshold && (
-            <EnergyLine start={extraEnergyPoint} end={{x: pvPoint.x, y: loadPoint.y }} linesColor={linesColor} className={flow.additionalSource < 0 ? "animated-line" : "animated-line-reverse"}/>
+            <EnergyLine start={extraEnergyPoint} end={{x: pvPoint.x, y: loadPoint.y }} linesColor={linesColor} className={flow.additionalSource < 0 ? "animated-line" : "animated-line-reverse"} animationDuration={getAnimationDuration(flow.additionalSource, measurementUnit)}/>
             )
           }
         </>)
@@ -33,19 +47,19 @@ export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoin
 
       {/*Grid line*/}
       { Math.abs(flow.grid) >= showEnergyThreshold && (
-          <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint} linesColor={linesColor} className={flow.grid < 0 ? "animated-line-reverse" : "animated-line"}/>
+          <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint} linesColor={linesColor} className={flow.grid < 0 ? "animated-line-reverse" : "animated-line"} animationDuration={getAnimationDuration(flow.grid, measurementUnit)}/>
         )
       }
 
       {/*Solar line*/}
       { flow.pv >= showEnergyThreshold && (
-          <EnergyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y}} linesColor={linesColor} className="animated-line-reverse"/>
+          <EnergyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y}} linesColor={linesColor} className="animated-line-reverse" animationDuration={getAnimationDuration(flow.pv, measurementUnit)}/>
         )
       }
 
       {/*Load line*/}
       { flow.load >= showEnergyThreshold && (
-          <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={loadPoint} linesColor={linesColor} className="animated-line-reverse"/>
+          <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={loadPoint} linesColor={linesColor} className="animated-line-reverse" animationDuration={getAnimationDuration(flow.load, measurementUnit)}/>
         )
       }
 
@@ -55,15 +69,16 @@ export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoin
 };
 
 
-const EnergyLine: React.FC<CustomXarrowProps> = ({start, end, className, linesColor = "rgb(104, 193, 255)"}) => {
+const EnergyLine: React.FC<EnergyLineProps> = ({start, end, className, linesColor = "rgb(104, 193, 255)", animationDuration = "1s"}) => {
   return (
   <line
     x1={start.x} y1={start.y}
     x2={end.x} y2={end.y}
     stroke={linesColor} strokeWidth="8"
     style={{
-      filter: "drop-shadow(0px 0px 2px " + linesColor + ")",
-    }}
+      filter: `drop-shadow(0px 0px 4px ${linesColor}) drop-shadow(0px 0px 8px ${linesColor})`,
+      ['--animation-duration' as string]: animationDuration,
+    } as React.CSSProperties}
     className={className || ""}
   />
  );
