@@ -1,28 +1,21 @@
-type SeriesSize = 'sm' | 'md' | 'lg';
-
-
 export interface SimpleOptions {
-  text: string;
-  showSeriesCount: boolean;
-  seriesCountSize: SeriesSize;
-  valueFirst: boolean;
   showLegend: boolean;
   solarColor: string;
-  extraSourceColor: string;
   loadColor: string;
   gridColor: string;
-  showEnergyThreshold: number;
-  zoom: number;
-  xOffset: number;
-  yOffset: number;
+  linesColor: string;
+  additionalSourceColor: string;
+  additionalSourceLabel: string;
+  additionalSourceIcon: string;
+  additionalSourceAlwaysShow: boolean;
   solarQuery: any;
   gridQuery: any;
   additionalSourceLoadQuery: any;
   additionalSourceSOCQuery: any;
-  additionalSourceLabel: string;
-  additionalSourceIcon: string;
-  additionalSourceColor: string;
-  additionalSourceAlwaysShow: boolean;
+  showEnergyThreshold: number;
   measurementUnit: 'W' | 'kW' | 'MW';
   animationSpeedReference: number;
+  zoom: number;
+  xOffset: number;
+  yOffset: number;
 }

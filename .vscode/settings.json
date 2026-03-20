@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "a-lehmann-elektro-ag",
+        "projectKey": "A-Lehmann-Elektro-AG_solar-flow-grafana"
+    }
+}

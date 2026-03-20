@@ -1,17 +1,13 @@
-import {PointPosition} from "../../components/energyFlow";
+export const UNIT_TO_WATTS: Record<'W' | 'kW' | 'MW', number> = {
+    W: 1,
+    kW: 1000,
+    MW: 1000000,
+};
 
 export interface FlowData {
- pv: number;
- grid: number;
- load: number;
- additionalSource: number;
- additionalSourceSOC: number;
-}
-
-export interface CustomXarrowProps {
- start: PointPosition;
- end: PointPosition;
- className?: string;
- strokeWidth?: number;
- linesColor?: string;
+    pv: number;
+    grid: number;
+    load: number;
+    additionalSource: number;
+    additionalSourceSOC: number;
 }
