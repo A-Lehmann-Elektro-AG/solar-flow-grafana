@@ -3,11 +3,10 @@ import {PointPosition} from "./index";
 import { CustomXarrowProps, FlowData } from '../../models/flow';
 
 const UNIT_TO_WATTS: Record<string, number> = { W: 1, kW: 1000, MW: 1000000 };
-// Reference: 1000 W (1 kW) produces a 1 s animation cycle.
-// Effective speed range: ~200 W (slow, 2.5 s) → ~3300 W (fast, 0.3 s)
-const getAnimationDuration = (energy: number, unit: string): string => {
+// At `speedReference` watts the animation runs at exactly 1 s per cycle.
+const getAnimationDuration = (energy: number, unit: string, speedReference: number): string => {
   const energyInW = Math.abs(energy) * (UNIT_TO_WATTS[unit] ?? 1);
-  const duration = Math.max(0.3, Math.min(2.5, 400 / Math.max(energyInW, 0.001)));
+  const duration = Math.max(0.3, Math.min(2.5, speedReference / Math.max(energyInW, 0.001)));
   return `${duration.toFixed(2)}s`;
 };
 
@@ -25,10 +24,11 @@ interface EnergyLinesProps {
  alwaysShowAdditionalSource: boolean;
  showEnergyThreshold: number;
  measurementUnit: string;
+ animationSpeedReference: number;
 }
 
 
-export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoint, gridPoint, extraEnergyPoint, linesColor, showEnergyThreshold, alwaysShowAdditionalSource, measurementUnit}) => {
+export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoint, gridPoint, extraEnergyPoint, linesColor, showEnergyThreshold, alwaysShowAdditionalSource, measurementUnit, animationSpeedReference}) => {
   return (
     <>
       <EmptyLine start={{x: pvPoint.x + 2, y: loadPoint.y}} end={gridPoint}/>
@@ -39,7 +39,7 @@ export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoin
         <>
           <EmptyLine start={extraEnergyPoint} end={{x: pvPoint.x, y: loadPoint.y + 2}}/>
           { Math.abs(flow.additionalSource) > showEnergyThreshold && (
-            <EnergyLine start={extraEnergyPoint} end={{x: pvPoint.x, y: loadPoint.y }} linesColor={linesColor} className={flow.additionalSource < 0 ? "animated-line" : "animated-line-reverse"} animationDuration={getAnimationDuration(flow.additionalSource, measurementUnit)}/>
+            <EnergyLine start={extraEnergyPoint} end={{x: pvPoint.x, y: loadPoint.y }} linesColor={linesColor} className={flow.additionalSource < 0 ? "animated-line" : "animated-line-reverse"} animationDuration={getAnimationDuration(flow.additionalSource, measurementUnit, animationSpeedReference)}/>
             )
           }
         </>)
@@ -47,19 +47,19 @@ export const EnergyLines: React.FC<EnergyLinesProps> = ({flow, pvPoint, loadPoin
 
       {/*Grid line*/}
       { Math.abs(flow.grid) >= showEnergyThreshold && (
-          <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint} linesColor={linesColor} className={flow.grid < 0 ? "animated-line-reverse" : "animated-line"} animationDuration={getAnimationDuration(flow.grid, measurementUnit)}/>
+          <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={gridPoint} linesColor={linesColor} className={flow.grid < 0 ? "animated-line-reverse" : "animated-line"} animationDuration={getAnimationDuration(flow.grid, measurementUnit, animationSpeedReference)}/>
         )
       }
 
       {/*Solar line*/}
       { flow.pv >= showEnergyThreshold && (
-          <EnergyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y}} linesColor={linesColor} className="animated-line-reverse" animationDuration={getAnimationDuration(flow.pv, measurementUnit)}/>
+          <EnergyLine start={pvPoint} end={{x: pvPoint.x, y: loadPoint.y}} linesColor={linesColor} className="animated-line-reverse" animationDuration={getAnimationDuration(flow.pv, measurementUnit, animationSpeedReference)}/>
         )
       }
 
       {/*Load line*/}
       { flow.load >= showEnergyThreshold && (
-          <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={loadPoint} linesColor={linesColor} className="animated-line-reverse" animationDuration={getAnimationDuration(flow.load, measurementUnit)}/>
+          <EnergyLine start={{x: pvPoint.x, y: loadPoint.y}} end={loadPoint} linesColor={linesColor} className="animated-line-reverse" animationDuration={getAnimationDuration(flow.load, measurementUnit, animationSpeedReference)}/>
         )
       }
 

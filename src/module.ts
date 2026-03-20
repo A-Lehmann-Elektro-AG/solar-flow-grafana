@@ -73,6 +73,17 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
         defaultValue: 0,
       }
     )
+    .addSliderInput({
+      path: 'animationSpeedReference',
+      name: 'Animation speed reference (W)',
+      description: 'Power level (in watts) at which the animation runs at 1 s per cycle. Lower = faster at low values; higher = slower until high values.',
+      defaultValue: 400,
+      settings: {
+        min: 100,
+        max: 5000,
+        step: 100,
+      },
+    })
     .addSliderInput(
       {
         path: 'zoom',

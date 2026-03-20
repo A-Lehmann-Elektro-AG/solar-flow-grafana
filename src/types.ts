@@ -24,4 +24,5 @@ export interface SimpleOptions {
   additionalSourceColor: string;
   additionalSourceAlwaysShow: boolean;
   measurementUnit: 'W' | 'kW' | 'MW';
+  animationSpeedReference: number;
 }
