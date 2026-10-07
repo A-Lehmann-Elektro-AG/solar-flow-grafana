@@ -49,11 +49,11 @@ const BASE_BOUNDS = { minX: -30, minY: -15, maxX: 580, maxY: 420 };
 const EXTENDED_MAX_Y = 640;
 
 /** Compute center positions for additional source circles based on count. */
-function getAdditionalCenters(count: number): PointPosition[] {
+function getAdditionalCenters(count: number, additionalY: number = ADDITIONAL_Y): PointPosition[] {
   switch (count) {
-    case 1: return [{ x: 275, y: ADDITIONAL_Y }];
-    case 2: return [{ x: 175, y: ADDITIONAL_Y }, { x: 375, y: ADDITIONAL_Y }];
-    case 3: return [{ x: 75, y: ADDITIONAL_Y }, { x: 275, y: ADDITIONAL_Y }, { x: 475, y: ADDITIONAL_Y }];
+    case 1: return [{ x: 275, y: additionalY }];
+    case 2: return [{ x: 175, y: additionalY }, { x: 375, y: additionalY }];
+    case 3: return [{ x: 75, y: additionalY }, { x: 275, y: additionalY }, { x: 475, y: additionalY }];
     default: return [];
   }
 }
@@ -148,8 +148,14 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options, width, he
 
   const color = (key: keyof SimpleOptions) => theme.visualization.getColorByName(options[key] as string);
 
+  const labelFontSize = options.labelFontSize ?? 16;
+  // Extra vertical clearance below Row 2 (Load / Grid) so large labels never collide with Row 3 connecting lines
+  const labelExtraY = options.showLegend ? Math.max(0, Math.round((labelFontSize - 16) * 1.8)) : 0;
+  const subJunctionY = SUB_JUNCTION_Y + labelExtraY;
+  const additionalY = ADDITIONAL_Y + labelExtraY;
+
   const sourceCount = sourceConfigs.length;
-  const centers = getAdditionalCenters(sourceCount);
+  const centers = getAdditionalCenters(sourceCount, additionalY);
 
   // Determine which sources are visible (for viewBox calculation)
   const anySourceVisible = flowData.additionalSources.some((s, i) =>
@@ -165,14 +171,18 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options, width, he
     alwaysShow: sourceConfigs[i]?.alwaysShow ?? false,
   }));
 
-  const subJunction: PointPosition | null = sourceCount >= 2 ? { x: MAIN_HUB.x, y: SUB_JUNCTION_Y } : null;
+  const subJunction: PointPosition | null = sourceCount >= 2 ? { x: MAIN_HUB.x, y: subJunctionY } : null;
 
   const pad = options.padding ?? 20;
-  const maxY = anySourceVisible ? EXTENDED_MAX_Y : BASE_BOUNDS.maxY;
+  const powerFontSize = options.powerFontSize ?? 18;
+  const extraBottom = Math.max(0, (powerFontSize - 18) * 1.5 + (options.showLegend ? (labelFontSize - 16) * 1.5 : 0) + 10);
+  const extraTop = Math.max(0, powerFontSize - 18);
+  const maxY = (anySourceVisible ? (EXTENDED_MAX_Y + labelExtraY) : BASE_BOUNDS.maxY) + extraBottom;
+  const minY = BASE_BOUNDS.minY - extraTop;
   const vbX = BASE_BOUNDS.minX - pad;
-  const vbY = BASE_BOUNDS.minY - pad;
+  const vbY = minY - pad;
   const vbW = BASE_BOUNDS.maxX - BASE_BOUNDS.minX + pad * 2;
-  const vbH = maxY - BASE_BOUNDS.minY + pad * 2;
+  const vbH = maxY - minY + pad * 2;
 
   return (
     <svg
@@ -226,6 +236,9 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options, width, he
         measurementUnit={options.measurementUnit}
         showLegend={false}
         value={flowData.pv}
+        powerFontSize={options.powerFontSize}
+        socFontSize={options.socFontSize}
+        labelFontSize={options.labelFontSize}
         pointStyle={customPoint(color('solarColor'))}
         icon={ICON_PATHS.solarPanel}
         energyDirection={flowData.pv > 0 ? 'outgoing' : 'none'}
@@ -239,6 +252,9 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options, width, he
         measurementUnit={options.measurementUnit}
         showLegend={options.showLegend}
         value={flowData.load}
+        powerFontSize={options.powerFontSize}
+        socFontSize={options.socFontSize}
+        labelFontSize={options.labelFontSize}
         pointStyle={customPoint(color('loadColor'))}
         icon={ICON_PATHS.load}
         energyDirection={flowData.load > 0 ? 'incoming' : 'none'}
@@ -252,6 +268,9 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options, width, he
         measurementUnit={options.measurementUnit}
         showLegend={options.showLegend}
         value={flowData.grid}
+        powerFontSize={options.powerFontSize}
+        socFontSize={options.socFontSize}
+        labelFontSize={options.labelFontSize}
         pointStyle={customPoint(color('gridColor'))}
         icon={ICON_PATHS.grid}
         energyDirection={getEnergyDirection(flowData.grid)}
@@ -274,6 +293,9 @@ export const EnergyFlow: React.FC<EnergyFlowProps> = ({ data, options, width, he
             showLegend={options.showLegend}
             value={srcFlow.value}
             subValue={srcFlow.soc}
+            powerFontSize={options.powerFontSize}
+            socFontSize={options.socFontSize}
+            labelFontSize={options.labelFontSize}
             pointStyle={customPoint(color(cfg.colorKey))}
             icon={ICON_PATHS[cfg.icon]}
             valuePlacement="bottom"
