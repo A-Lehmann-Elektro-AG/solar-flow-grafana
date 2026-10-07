@@ -12,6 +12,11 @@ export interface SimpleOptions {
   animationSpeedReference: number;
   padding: number;
 
+  // Typography
+  powerFontSize?: number;
+  socFontSize?: number;
+  labelFontSize?: number;
+
   // Additional sources (up to 3)
   additionalSourceCount: number;
 

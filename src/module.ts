@@ -233,6 +233,53 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
       category: ['Animation'],
     })
 
+    // ── Text size ─────────────────────────────────────────
+    .addSliderInput({
+      path: 'powerFontSize',
+      name: 'Power text size',
+      description: 'Font size (px) for energy power values (default: 18)',
+      defaultValue: 18,
+      settings: {
+        min: 10,
+        max: 36,
+        step: 1,
+      },
+      category: ['Text size'],
+    })
+    .addSliderInput({
+      path: 'socFontSize',
+      name: 'State of charge text size',
+      description: 'Font size (px) for State of Charge percentage (default: 12)',
+      defaultValue: 12,
+      settings: {
+        min: 8,
+        max: 24,
+        step: 1,
+      },
+      category: ['Text size'],
+      showIf: (opts) => {
+        const count = opts.additionalSourceCount ?? 0;
+        return (
+          (count >= 1 && Boolean(opts.additionalSourceSOCQuery)) ||
+          (count >= 2 && Boolean(opts.additionalSource2SOCQuery)) ||
+          (count >= 3 && Boolean(opts.additionalSource3SOCQuery))
+        );
+      },
+    })
+    .addSliderInput({
+      path: 'labelFontSize',
+      name: 'Label text size',
+      description: 'Font size (px) for labels (default: 16)',
+      defaultValue: 16,
+      settings: {
+        min: 10,
+        max: 32,
+        step: 1,
+      },
+      category: ['Text size'],
+      showIf: (opts) => Boolean(opts.showLegend),
+    })
+
     // ── Layout ────────────────────────────────────────────
     .addSliderInput({
       path: 'padding',

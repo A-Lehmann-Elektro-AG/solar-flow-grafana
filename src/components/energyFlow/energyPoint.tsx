@@ -16,6 +16,9 @@ interface PointProps {
   valuePlacement?: 'top' | 'bottom';
   energyDirection?: 'incoming' | 'outgoing' | 'none';
   animationDuration?: string;
+  powerFontSize?: number;
+  socFontSize?: number;
+  labelFontSize?: number;
 }
 
 export const customPoint = (color: string) => ({
@@ -41,15 +44,33 @@ export function Point(props: Readonly<PointProps>) {
   const fontColor = theme.isDark ? '#ffffff' : '#000000';
   const iconColor = theme.isDark ? '#181B1F' : '#ffffff';
 
+  const powerSize = props.powerFontSize ?? 18;
+  const socSize = props.socFontSize ?? 12;
+  const labelSize = props.labelFontSize ?? 16;
+
   const { displayValue, displayUnit } = formatEnergyValue(props.value, props.measurementUnit);
   const valueAtBottom = props.valuePlacement === 'bottom';
-  const valueY = valueAtBottom ? OUTER_RADIUS + 25 : -(OUTER_RADIUS + 10);
-  const legendY = valueAtBottom ? OUTER_RADIUS + 45 : OUTER_RADIUS + 25;
+  const valueY = valueAtBottom ? OUTER_RADIUS + 7 + powerSize : -(OUTER_RADIUS + 7);
+  const legendY = valueAtBottom ? valueY + 4 + labelSize : OUTER_RADIUS + 8 + labelSize;
 
   const ringClasses = getRingClasses(props.energyDirection);
   const ringStyle = props.animationDuration
     ? { ...props.pointStyle, ['--animation-duration' as string]: props.animationDuration } as React.CSSProperties
     : props.pointStyle;
+
+  const hasSoc = props.subValue !== undefined && props.subValue !== 0;
+  // Keep the icon prominent even when SoC is displayed
+  const iconSize = hasSoc ? Math.round(Math.max(68, 76 - (socSize - 12) * 0.45)) : 80;
+  const iconX = -iconSize / 2;
+
+  // Vertically group the icon and SoC together with tight, cohesive spacing
+  const gap = 3;
+  const totalHeight = iconSize + gap + socSize;
+  const stackTop = -Math.round(totalHeight / 2) + 1;
+
+  const iconY = hasSoc ? stackTop : -40;
+  // Position SoC text comfortably inside the circle with clean margin from the bottom curve
+  const socY = stackTop + iconSize + gap + Math.round(socSize * 0.85);
 
   return (
     <g transform={`translate(${props.x}, ${props.y})`}>
@@ -61,17 +82,17 @@ export function Point(props: Readonly<PointProps>) {
         </>
       )}
       <circle r={BASE_RADIUS} style={props.pointStyle} strokeWidth="1.5" fill={props.pointStyle.stroke} />
-      <text fontSize={18} fill={fontColor} x="0" y={valueY} textAnchor="middle">
+      <text fontSize={powerSize} fill={fontColor} x="0" y={valueY} textAnchor="middle">
         {displayValue + ' ' + displayUnit}
       </text>
       {props.showLegend && (
-        <text fontSize={16} fill={fontColor} x="0" y={legendY} textAnchor="middle">{props.label}</text>
+        <text fontSize={labelSize} fill={fontColor} x="0" y={legendY} textAnchor="middle">{props.label}</text>
       )}
-      <svg x="-40" y="-40" height="80" width="80" fill={iconColor} viewBox="0 -960 960 960">
+      <svg x={iconX} y={iconY} height={iconSize} width={iconSize} fill={iconColor} viewBox="0 -960 960 960">
         <path d={props.icon} />
       </svg>
-      {props.subValue !== undefined && props.subValue !== 0 && (
-        <text fontSize={12} fill={fontColor} x="0" y={BASE_RADIUS - 12} textAnchor="middle">{props.subValue + '%'}</text>
+      {hasSoc && (
+        <text fontSize={socSize} fill={fontColor} x="0" y={socY} textAnchor="middle">{props.subValue + '%'}</text>
       )}
     </g>
   );
