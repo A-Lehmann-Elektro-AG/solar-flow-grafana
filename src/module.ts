@@ -7,6 +7,7 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
     { value: 'battery', label: 'Battery' },
     { value: 'evPanel', label: 'EV Panel' },
     { value: 'solarPanel', label: 'Solar Panel' },
+    { value: 'engine', label: 'Engine' },
   ];
 
   return builder
